@@ -95,7 +95,7 @@ export default function Kalender() {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  const saveProfileHandler = async () => {
+  const saveProfileHandler = () => {
     const name = profileForm.name.trim();
     if (!name) return;
     const p = { name, color: profileForm.color };
@@ -103,8 +103,8 @@ export default function Kalender() {
     const updatedDir = { ...dataRef.current.userDirectory, [name.toLowerCase()]: profileForm.color };
     const updatedData = { ...dataRef.current, userDirectory: updatedDir };
     dataRef.current = updatedData; setUserDir(updatedDir);
-    await pushData(updatedData);
     setShowProfileSetup(false); setShowProfileEditor(false);
+    pushData(updatedData); // fire and forget
   };
 
   const handleNameChange = (v) => {
@@ -135,9 +135,8 @@ export default function Kalender() {
     setEditId(entry.id); setModal(true);
   };
 
-  const saveEntry = async () => {
+  const saveEntry = () => {
     if (!form.title.trim() || !form.startDate || !form.endDate || !user) return;
-    setSyncing(true);
     const start = form.startDate <= form.endDate ? form.startDate : form.endDate;
     const end   = form.startDate <= form.endDate ? form.endDate   : form.startDate;
     const entry = { title: form.title.trim(), startDate: start, endDate: end, note: form.note, color: user.color, author: user.name };
@@ -146,15 +145,16 @@ export default function Kalender() {
       : [...dataRef.current.entries, { ...entry, id: Date.now().toString() }];
     const updatedData = { ...dataRef.current, entries: updated };
     dataRef.current = updatedData; setEntries(updated);
-    await pushData(updatedData);
-    setSyncing(false); setModal(false); setEditId(null);
+    setModal(false); setEditId(null);
+    setSyncing(true);
+    pushData(updatedData).then(() => setSyncing(false));
   };
 
-  const deleteEntry = async (id) => {
+  const deleteEntry = (id) => {
     const updated = dataRef.current.entries.filter(e => e.id !== id);
     const updatedData = { ...dataRef.current, entries: updated };
     dataRef.current = updatedData; setEntries(updated);
-    await pushData(updatedData);
+    pushData(updatedData); // fire and forget
   };
 
   const prevMonth = () => { if (month===0){setMonth(11);setYear(y=>y-1);}else setMonth(m=>m-1); setSelectedDay(null); };
@@ -418,4 +418,4 @@ export default function Kalender() {
       )}
     </div>
   );
-}	
+}
