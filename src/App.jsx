@@ -178,6 +178,7 @@ export default function Kalender() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hiddenUsers, setHiddenUsers] = useState(new Set());
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // user key to confirm delete
 
   const intervalRef = useRef(null);
   const dataRef     = useRef({ entries: [], userDirectory: {} });
@@ -227,6 +228,17 @@ export default function Kalender() {
       if (next.has(key)) next.delete(key); else next.add(key);
       return next;
     });
+  };
+
+  const deleteUser = (key) => {
+    const updatedDir = { ...dataRef.current.userDirectory };
+    delete updatedDir[key];
+    const updatedData = { ...dataRef.current, userDirectory: updatedDir };
+    dataRef.current = updatedData;
+    setUserDir(updatedDir);
+    setHiddenUsers(prev => { const next = new Set(prev); next.delete(key); return next; });
+    setDeleteConfirm(null);
+    pushData(updatedData);
   };
 
   const getEntriesForDay = (dayStr) =>
@@ -359,13 +371,14 @@ export default function Kalender() {
             <div style={{ fontSize:11, fontWeight:600, color:T.sidebarLabel, letterSpacing:1.5, textTransform:"uppercase", marginBottom:12, paddingLeft:8 }}>Benutzer</div>
             {allUsers.length===0 && <div style={{ fontSize:13, color:T.textSecondary, paddingLeft:8 }}>Noch keine Benutzer</div>}
             {allUsers.map(u=>(
-              <div key={u.key} onClick={()=>toggleUser(u.key)}
-                style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 8px", borderRadius:8, cursor:"pointer", marginBottom:2, transition:"background .12s" }}
-                onMouseEnter={e=>e.currentTarget.style.background=theme==="gold"?"#1a1a0a":"#f8f9fa"}
-                onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                <input type="checkbox" checked={!hiddenUsers.has(u.key)} onChange={()=>toggleUser(u.key)} onClick={e=>e.stopPropagation()} style={{ accentColor:u.color }}/>
-                <div style={{ width:12, height:12, borderRadius:3, background:hiddenUsers.has(u.key)?(theme==="gold"?"#333":"#ddd"):u.color, flexShrink:0, transition:"background .15s" }}/>
-                <span style={{ fontSize:14, color:hiddenUsers.has(u.key)?T.textSecondary:T.textPrimary, fontWeight:500 }}>{u.name}</span>
+              <div key={u.key}
+                style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 8px", borderRadius:8, marginBottom:2, transition:"background .12s", position:"relative" }}
+                onMouseEnter={e=>{e.currentTarget.style.background=theme==="gold"?"#1a1a0a":"#f8f9fa"; e.currentTarget.querySelector('.del-btn').style.opacity="1";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.querySelector('.del-btn').style.opacity="0";}}>
+                <input type="checkbox" checked={!hiddenUsers.has(u.key)} onChange={()=>toggleUser(u.key)} style={{ accentColor:u.color, cursor:"pointer" }}/>
+                <div style={{ width:12, height:12, borderRadius:3, background:hiddenUsers.has(u.key)?(theme==="gold"?"#333":"#ddd"):u.color, flexShrink:0, cursor:"pointer" }} onClick={()=>toggleUser(u.key)}/>
+                <span style={{ fontSize:14, color:hiddenUsers.has(u.key)?T.textSecondary:T.textPrimary, fontWeight:500, flex:1, cursor:"pointer" }} onClick={()=>toggleUser(u.key)}>{u.name}</span>
+                <button className="del-btn btn" onClick={e=>{e.stopPropagation();setDeleteConfirm(u.key);}} style={{ opacity:0, transition:"opacity .15s", background:"none", color:"#e74c3c", fontSize:14, padding:"2px 4px", borderRadius:4, lineHeight:1 }}>✕</button>
               </div>
             ))}
           </div>
@@ -524,6 +537,24 @@ export default function Kalender() {
               <button className="btn" onClick={saveProfileHandler} style={{ flex:2, background:profileForm.name.trim()?T.accent:T.btnBorder, color:profileForm.name.trim()?(theme==="gold"?"#0d0d0d":"#fff"):T.textSecondary, borderRadius:10, padding:"13px", fontFamily:"inherit", fontSize:15, fontWeight:600, cursor:profileForm.name.trim()?"pointer":"default" }}>
                 {showProfileSetup?"Los geht's →":"Speichern"}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Delete Confirm Dialog ── */}
+      {deleteConfirm && (
+        <div className="mbg" onClick={()=>setDeleteConfirm(null)} style={{ position:"fixed", inset:0, background:T.modalOverlay, display:"flex", alignItems:"center", justifyContent:"center", zIndex:300, backdropFilter:"blur(3px)" }}>
+          <div className="mbox" onClick={e=>e.stopPropagation()} style={{ background:T.modalBg, borderRadius:16, padding:28, width:"90%", maxWidth:380, boxShadow:"0 8px 40px rgba(0,0,0,.3)", border:theme==="gold"?"1px solid #3a3020":"none", textAlign:"center" }}>
+            <div style={{ fontSize:32, marginBottom:12 }}>⚠️</div>
+            <div style={{ fontWeight:700, fontSize:18, color:T.textPrimary, marginBottom:8 }}>User löschen?</div>
+            <div style={{ fontSize:14, color:T.textSecondary, marginBottom:24, lineHeight:1.6 }}>
+              Möchtest du <strong style={{ color:T.textPrimary }}>{deleteConfirm.charAt(0).toUpperCase() + deleteConfirm.slice(1)}</strong> wirklich komplett löschen?<br/>
+              Alle Einträge dieses Users bleiben erhalten.
+            </div>
+            <div style={{ display:"flex", gap:10 }}>
+              <button className="btn" onClick={()=>setDeleteConfirm(null)} style={{ flex:1, background:T.inputBg, border:`1px solid ${T.btnBorder}`, color:T.textSecondary, borderRadius:10, padding:"11px", fontFamily:"inherit", fontSize:14 }}>Abbrechen</button>
+              <button className="btn" onClick={()=>deleteUser(deleteConfirm)} style={{ flex:1, background:"#e74c3c", color:"#fff", borderRadius:10, padding:"11px", fontFamily:"inherit", fontSize:14, fontWeight:600 }}>Ja, löschen</button>
             </div>
           </div>
         </div>
