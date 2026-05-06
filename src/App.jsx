@@ -3,10 +3,11 @@ import { useState, useEffect, useRef } from "react";
 const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
 const COLORS = [
-  "#e74c3c","#c0392b","#ff6b6b","#e67e22","#f39c12","#f1c40f",
-  "#a8e063","#2ecc71","#1abc9c","#16a085","#3498db","#2980b9",
-  "#1565c0","#9b59b6","#8e44ad","#e91e63","#ad1457","#795548",
-  "#90a4ae","#607d8b"
+  "#ff2d2d","#ff6b00","#ffaa00","#ffe600","#c8ff00",
+  "#00e676","#00e5ff","#00b0ff","#2979ff","#651fff",
+  "#d500f9","#ff1744","#ff6d00","#ffea00","#76ff03",
+  "#1de9b6","#00e5ff","#40c4ff","#448aff","#7c4dff",
+  "#e040fb","#ff4081","#ff6e40","#ffd740","#69f0ae"
 ];
 
 const BIN_ID  = import.meta.env.VITE_BIN_ID;
