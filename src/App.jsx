@@ -263,7 +263,13 @@ export default function Kalender() {
     const updated = editId
       ? dataRef.current.entries.map(e => e.id === editId ? { ...entry, id: editId } : e)
       : [...dataRef.current.entries, { ...entry, id: Date.now().toString() }];
-    const updatedData = { ...dataRef.current, entries: updated };
+    // Auto-register user in shared directory if not already there
+    const userKey = user.name.toLowerCase();
+    const updatedDir = dataRef.current.userDirectory[userKey]
+      ? dataRef.current.userDirectory
+      : { ...dataRef.current.userDirectory, [userKey]: user.color };
+    if (!dataRef.current.userDirectory[userKey]) setUserDir(updatedDir);
+    const updatedData = { ...dataRef.current, entries: updated, userDirectory: updatedDir };
     dataRef.current = updatedData; setEntries(updated);
     setModal(false); setEditId(null);
     setSyncing(true);
