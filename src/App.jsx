@@ -180,6 +180,7 @@ export default function Kalender() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [hiddenUsers, setHiddenUsers] = useState(new Set());
   const [deleteConfirm, setDeleteConfirm] = useState(null); // user key to confirm delete
+  const [resetConfirm, setResetConfirm] = useState(null); // 'entries' | 'users' | null
 
   const intervalRef = useRef(null);
   const dataRef     = useRef({ entries: [], userDirectory: {} });
@@ -239,6 +240,23 @@ export default function Kalender() {
     setUserDir(updatedDir);
     setHiddenUsers(prev => { const next = new Set(prev); next.delete(key); return next; });
     setDeleteConfirm(null);
+    pushData(updatedData);
+  };
+
+  const resetEntries = () => {
+    const updatedData = { ...dataRef.current, entries: [] };
+    dataRef.current = updatedData;
+    setEntries([]);
+    setResetConfirm(null);
+    pushData(updatedData);
+  };
+
+  const resetUsers = () => {
+    const updatedData = { ...dataRef.current, userDirectory: {} };
+    dataRef.current = updatedData;
+    setUserDir({});
+    setHiddenUsers(new Set());
+    setResetConfirm(null);
     pushData(updatedData);
   };
 
@@ -388,6 +406,15 @@ export default function Kalender() {
                 <button className="del-btn btn" onClick={e=>{e.stopPropagation();setDeleteConfirm(u.key);}} style={{ opacity:0, transition:"opacity .15s", background:"none", color:"#e74c3c", fontSize:14, padding:"2px 4px", borderRadius:4, lineHeight:1 }}>✕</button>
               </div>
             ))}
+            {/* Reset buttons */}
+            <div style={{ marginTop:"auto", paddingTop:24, borderTop:`1px solid ${T.sidebarBorder}`, marginTop:20 }}>
+              <button className="btn" onClick={()=>setResetConfirm('entries')} style={{ width:"100%", background:"none", border:`1px solid #e74c3c44`, color:"#e74c3c", borderRadius:8, padding:"8px", fontFamily:"inherit", fontSize:12, marginBottom:8, textAlign:"left", paddingLeft:10 }}>
+                🗑 Alle Einträge löschen
+              </button>
+              <button className="btn" onClick={()=>setResetConfirm('users')} style={{ width:"100%", background:"none", border:`1px solid ${T.btnBorder}`, color:T.textSecondary, borderRadius:8, padding:"8px", fontFamily:"inherit", fontSize:12, textAlign:"left", paddingLeft:10 }}>
+                👥 Alle User löschen
+              </button>
+            </div>
           </div>
         </div>
 
@@ -544,6 +571,27 @@ export default function Kalender() {
               <button className="btn" onClick={saveProfileHandler} style={{ flex:2, background:profileForm.name.trim()?T.accent:T.btnBorder, color:profileForm.name.trim()?(theme==="gold"?"#0d0d0d":"#fff"):T.textSecondary, borderRadius:10, padding:"13px", fontFamily:"inherit", fontSize:15, fontWeight:600, cursor:profileForm.name.trim()?"pointer":"default" }}>
                 {showProfileSetup?"Los geht's →":"Speichern"}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Reset Confirm Dialog ── */}
+      {resetConfirm && (
+        <div className="mbg" onClick={()=>setResetConfirm(null)} style={{ position:"fixed", inset:0, background:T.modalOverlay, display:"flex", alignItems:"center", justifyContent:"center", zIndex:300, backdropFilter:"blur(3px)" }}>
+          <div className="mbox" onClick={e=>e.stopPropagation()} style={{ background:T.modalBg, borderRadius:16, padding:28, width:"90%", maxWidth:380, boxShadow:"0 8px 40px rgba(0,0,0,.3)", border:theme==="gold"?"1px solid #3a3020":"none", textAlign:"center" }}>
+            <div style={{ fontSize:32, marginBottom:12 }}>⚠️</div>
+            <div style={{ fontWeight:700, fontSize:18, color:T.textPrimary, marginBottom:8 }}>
+              {resetConfirm==="entries" ? "Alle Einträge löschen?" : "Alle User löschen?"}
+            </div>
+            <div style={{ fontSize:14, color:T.textSecondary, marginBottom:24, lineHeight:1.6 }}>
+              {resetConfirm==="entries"
+                ? "Alle Kalendereinträge werden unwiderruflich gelöscht. User bleiben erhalten."
+                : "Alle User werden aus der Sidebar entfernt. Einträge bleiben erhalten."}
+            </div>
+            <div style={{ display:"flex", gap:10 }}>
+              <button className="btn" onClick={()=>setResetConfirm(null)} style={{ flex:1, background:T.inputBg, border:`1px solid ${T.btnBorder}`, color:T.textSecondary, borderRadius:10, padding:"11px", fontFamily:"inherit", fontSize:14 }}>Abbrechen</button>
+              <button className="btn" onClick={resetConfirm==="entries" ? resetEntries : resetUsers} style={{ flex:1, background:"#e74c3c", color:"#fff", borderRadius:10, padding:"11px", fontFamily:"inherit", fontSize:14, fontWeight:600 }}>Ja, löschen</button>
             </div>
           </div>
         </div>
