@@ -196,6 +196,7 @@ export default function Kalender() {
   const [hiddenUsers, setHiddenUsers] = useState(new Set());
   const [deleteConfirm, setDeleteConfirm] = useState(null); // user key to confirm delete
   const [resetConfirm, setResetConfirm] = useState(null); // 'entries' | 'users' | null
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const intervalRef = useRef(null);
   const dataRef     = useRef({ entries: [], userDirectory: {} });
@@ -421,14 +422,22 @@ export default function Kalender() {
                 <button className="del-btn btn" onClick={e=>{e.stopPropagation();setDeleteConfirm(u.key);}} style={{ opacity:0, transition:"opacity .15s", background:"none", color:"#e74c3c", fontSize:14, padding:"2px 4px", borderRadius:4, lineHeight:1 }}>✕</button>
               </div>
             ))}
-            {/* Reset buttons */}
-            <div style={{ marginTop:"auto", paddingTop:24, borderTop:`1px solid ${T.sidebarBorder}`, marginTop:20 }}>
-              <button className="btn" onClick={()=>setResetConfirm('entries')} style={{ width:"100%", background:"none", border:`1px solid #e74c3c44`, color:"#e74c3c", borderRadius:8, padding:"8px", fontFamily:"inherit", fontSize:12, marginBottom:8, textAlign:"left", paddingLeft:10 }}>
-                🗑 Alle Einträge löschen
+            {/* Settings dropdown */}
+            <div style={{ marginTop:20, borderTop:`1px solid ${T.sidebarBorder}`, paddingTop:12, position:"relative" }}>
+              <button className="btn" onClick={()=>setSettingsOpen(o=>!o)} style={{ width:"100%", background:settingsOpen?(theme==="gold"?"#1a1a0a":"#f0f4ff"):"none", border:`1px solid ${T.btnBorder}`, color:T.textSecondary, borderRadius:8, padding:"9px 12px", fontFamily:"inherit", fontSize:13, textAlign:"left", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                <span>⚙ Settings</span>
+                <span style={{ fontSize:10, transition:"transform .2s", display:"inline-block", transform:settingsOpen?"rotate(180deg)":"rotate(0deg)" }}>▼</span>
               </button>
-              <button className="btn" onClick={()=>setResetConfirm('users')} style={{ width:"100%", background:"none", border:`1px solid ${T.btnBorder}`, color:T.textSecondary, borderRadius:8, padding:"8px", fontFamily:"inherit", fontSize:12, textAlign:"left", paddingLeft:10 }}>
-                👥 Alle User löschen
-              </button>
+              {settingsOpen && (
+                <div style={{ marginTop:6, background:theme==="gold"?"#1a1a0a":"#f8f9fa", borderRadius:8, border:`1px solid ${T.btnBorder}`, overflow:"hidden" }}>
+                  <button className="btn" onClick={()=>{setResetConfirm('entries');setSettingsOpen(false);}} style={{ width:"100%", background:"none", color:"#e74c3c", padding:"10px 12px", fontFamily:"inherit", fontSize:13, textAlign:"left", borderBottom:`1px solid ${T.btnBorder}` }}>
+                    🗑 Alle Einträge löschen
+                  </button>
+                  <button className="btn" onClick={()=>{setResetConfirm('users');setSettingsOpen(false);}} style={{ width:"100%", background:"none", color:T.textSecondary, padding:"10px 12px", fontFamily:"inherit", fontSize:13, textAlign:"left" }}>
+                    👥 Alle User löschen
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
