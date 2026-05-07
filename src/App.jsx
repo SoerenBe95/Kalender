@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
@@ -60,6 +60,13 @@ function fmtDate(str) {
   return `${d}.${m}.${y}`;
 }
 function dateInRange(date, start, end) { return date >= start && date <= end; }
+function getKW(year, month, day) {
+  const d = new Date(year, month, day);
+  const startOfYear = new Date(d.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((d - startOfYear) / 86400000);
+  const dayOfWeek = startOfYear.getDay() || 7;
+  return Math.ceil((dayOfYear + dayOfWeek) / 7);
+}
 function loadProfile() {
   try { return JSON.parse(localStorage.getItem("kal-profile")) ?? null; } catch { return null; }
 }
@@ -445,16 +452,30 @@ export default function Kalender() {
         {/* ── Main Calendar ── */}
         <div style={{ flex:1, padding:"16px 20px", overflow:"auto" }}>
           {/* Day headers */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:4, marginBottom:4 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4, marginBottom:4 }}>
+            <div style={{ textAlign:"center", fontSize:11, fontWeight:700, color:T.textSecondary, padding:"6px 0" }}>KW</div>
             {DAYS.map((d,i)=>(
               <div key={d} style={{ textAlign:"center", fontSize:12, fontWeight:600, color:i>=5?T.dayNumWeekend:T.textSecondary, padding:"6px 0", letterSpacing:.5 }}>{d}</div>
             ))}
           </div>
 
           {/* Grid */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:4 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4 }}>
             {cells.map((d,i)=>{
-              if(!d) return <div key={i} style={{ minHeight:100 }}/>;
+              // Insert KW label at start of each week row
+              const weekIndex = Math.floor(i / 7);
+              const dayInWeek = i % 7;
+              const kwEl = dayInWeek === 0 ? (() => {
+                // find first real day in this week
+                const firstRealDay = cells.slice(i, i+7).find(x => x !== null);
+                const kw = firstRealDay ? getKW(year, month, firstRealDay - 1) : "";
+                return (
+                  <div key={`kw-${weekIndex}`} style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, minHeight:100 }}>
+                    {kw}
+                  </div>
+                );
+              })() : null;
+              if(!d) return <>{kwEl}{kwEl===null?<div key={i} style={{ minHeight:100 }}/>:null}</>;
               const dayStr  = toDateStr(year,month,d);
               const dayEnts = getEntriesForDay(dayStr);
               const isSel   = selectedDay===d;
@@ -462,7 +483,9 @@ export default function Kalender() {
               const dow     = (firstDay+d-1)%7;
               const isWe    = dow===5||dow===6;
               return (
-                <div key={i} className={`day-cell${isSel?" sel":""}`} onClick={()=>openDay(d)}
+                <React.Fragment key={i}>
+                  {kwEl}
+                  <div className={`day-cell${isSel?" sel":""}`} onClick={()=>openDay(d)}
                   style={{ background:T.cellBg, border:`1px solid ${T.cellBorder}`, minHeight:100, padding:"6px 4px 4px", display:"flex", flexDirection:"column", gap:2, transition:"background .12s" }}>
                   <div style={{ display:"flex", justifyContent:"center", marginBottom:2 }}>
                     <div style={{ width:28, height:28, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center",
@@ -478,6 +501,7 @@ export default function Kalender() {
                     }}>{e.title}</div>
                   ))}
                 </div>
+                </React.Fragment>
               );
             })}
           </div>
@@ -577,9 +601,25 @@ export default function Kalender() {
               <div>
                 <label style={{ fontSize:12, fontWeight:600, color:T.textSecondary, display:"block", marginBottom:10 }}>DEINE FARBE</label>
                 <div style={{ display:"flex", flexWrap:"wrap", gap:10 }}>
-                  {COLORS.map(c=>(
-                    <div key={c} onClick={()=>setProfileForm(f=>({...f,color:c}))} style={{ width:30, height:30, borderRadius:"50%", background:c, cursor:"pointer", border:profileForm.color===c?`3px solid ${T.accent}`:"3px solid transparent", transform:profileForm.color===c?"scale(1.2)":"scale(1)", transition:"transform .1s,border-color .1s", flexShrink:0 }}/>
-                  ))}
+                  {COLORS.map(c=>{
+                    const takenBy = Object.entries(userDir).find(([k,v]) => v === c);
+                    const isTaken = takenBy && takenBy[0] !== profileForm.name.trim().toLowerCase();
+                    const takenName = takenBy ? takenBy[0].charAt(0).toUpperCase() + takenBy[0].slice(1) : null;
+                    return (
+                      <div key={c} style={{ position:"relative", flexShrink:0 }}>
+                        <div onClick={()=>setProfileForm(f=>({...f,color:c}))} style={{ width:30, height:30, borderRadius:"50%", background:c, cursor:"pointer", border:profileForm.color===c?`3px solid ${T.accent}`:"3px solid transparent", transform:profileForm.color===c?"scale(1.2)":"scale(1)", transition:"transform .1s,border-color .1s", opacity:isTaken?.8:1 }}/>
+                        {isTaken && (
+                          <div style={{ position:"absolute", top:-6, right:-6, background:"#e74c3c", color:"#fff", borderRadius:"50%", width:14, height:14, fontSize:9, display:"flex", alignItems:"center", justifyContent:"center", fontWeight:700, pointerEvents:"none" }} title={`Belegt von ${takenName}`}>!</div>
+                        )}
+                        {isTaken && (
+                          <div style={{ position:"absolute", bottom:-16, left:"50%", transform:"translateX(-50%)", fontSize:8, color:T.textSecondary, whiteSpace:"nowrap" }}>{takenName}</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ marginTop:20, fontSize:12, color:T.textSecondary }}>
+                  <span style={{ color:"#e74c3c", fontWeight:700 }}>!</span> = bereits vergeben
                 </div>
               </div>
               <div style={{ background:T.entryBg, borderRadius:10, padding:"12px 14px", borderLeft:`4px solid ${profileForm.color}`, display:"flex", alignItems:"center", gap:10 }}>
