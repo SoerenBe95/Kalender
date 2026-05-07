@@ -338,15 +338,15 @@ export default function Kalender() {
 
   // Gold theme decorative gradient
   const goldBg = theme === "gold"
-    ? `radial-gradient(ellipse at 20% 0%, #1a1500 0%, transparent 50%),
-       radial-gradient(ellipse at 80% 100%, #1a0d00 0%, transparent 50%),
-       #0d0d0d`
+    ? `radial-gradient(ellipse at 20% 0%, #1a150088 0%, transparent 50%),
+       radial-gradient(ellipse at 80% 100%, #1a0d0088 0%, transparent 50%),
+       url('/image.png')`
     : T.bg;
 
   const inp = { background: T.inputBg, border: `1.5px solid ${T.inputBorder}`, borderRadius: 8, color: T.textPrimary, padding: "10px 12px", fontSize: 14, fontFamily: "inherit", outline: "none", width: "100%", transition: "border-color .15s" };
 
   return (
-    <div style={{ minHeight:"100vh", background: goldBg, fontFamily: T.fontHeading, display:"flex", flexDirection:"column", transition:"background .4s" }}>
+    <div style={{ minHeight:"100vh", background: goldBg, backgroundSize:"cover", backgroundPosition:"center", backgroundAttachment:"fixed", fontFamily: T.fontHeading, display:"flex", flexDirection:"column", transition:"background .4s" }}>
       <style>{`
         @import url('${T.fontImport}');
         * { box-sizing:border-box; margin:0; padding:0; }
