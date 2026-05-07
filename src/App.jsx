@@ -472,12 +472,11 @@ export default function Kalender() {
                       boxShadow:isTod&&theme==="gold"?`0 0 12px ${T.accent}66`:"none",
                     }}>{d}</div>
                   </div>
-                  {dayEnts.slice(0,3).map((e,ei)=>(
+                  {dayEnts.map((e,ei)=>(
                     <div key={ei} style={{ background:e.color, borderRadius:4, padding:"2px 6px", fontSize:11, color:"#fff", overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", fontWeight:500,
                       boxShadow:theme==="gold"?`0 1px 4px ${e.color}66`:"none"
                     }}>{e.title}</div>
                   ))}
-                  {dayEnts.length>3 && <div style={{ fontSize:11, color:T.textSecondary, paddingLeft:4 }}>+{dayEnts.length-3} weitere</div>}
                 </div>
               );
             })}
