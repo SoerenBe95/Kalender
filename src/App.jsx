@@ -3,11 +3,26 @@ import { useState, useEffect, useRef } from "react";
 const MONTHS = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
 const DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
 const COLORS = [
-  "#ff2d2d","#ff6b00","#ffaa00","#ffe600","#c8ff00",
-  "#00e676","#00e5ff","#00b0ff","#2979ff","#651fff",
-  "#d500f9","#ff1744","#ff6d00","#ffea00","#76ff03",
-  "#1de9b6","#00e5ff","#40c4ff","#448aff","#7c4dff",
-  "#e040fb","#ff4081","#ff6e40","#ffd740","#69f0ae"
+  // Reds & Pinks
+  "#e53935","#ff4081","#f06292",
+  // Oranges
+  "#f4511e","#fb8c00",
+  // Yellows
+  "#f9a825","#fdd835",
+  // Greens
+  "#43a047","#00c853","#69f0ae",
+  // Teals & Cyan
+  "#00897b","#00bcd4","#00e5ff",
+  // Blues
+  "#1e88e5","#1565c0","#42a5f5",
+  // Purples & Indigo
+  "#5e35b1","#8e24aa","#ce93d8",
+  // Browns
+  "#6d4c41","#a1887f",
+  // Greys
+  "#546e7a","#90a4ae","#b0bec5",
+  // Black & White-ish
+  "#212121","#eeeeee"
 ];
 
 const BIN_ID  = import.meta.env.VITE_BIN_ID;
