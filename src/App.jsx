@@ -199,7 +199,7 @@ export default function Kalender() {
   const [showProfileEditor, setShowProfileEditor] = useState(false);
   const [nameHint, setNameHint]                 = useState(null);
 
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 768);
   const [hiddenUsers, setHiddenUsers] = useState(new Set());
   const [deleteConfirm, setDeleteConfirm] = useState(null); // user key to confirm delete
   const [resetConfirm, setResetConfirm] = useState(null); // 'entries' | 'users' | null
@@ -221,6 +221,16 @@ export default function Kalender() {
       });
     }, 10000);
     return () => clearInterval(intervalRef.current);
+  }, []);
+
+  // Auto close sidebar on mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) setSidebarOpen(false);
+      else setSidebarOpen(true);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const toggleTheme = () => {
@@ -367,6 +377,21 @@ export default function Kalender() {
         .mbox { animation:si .2s cubic-bezier(.22,1,.36,1); }
         @keyframes fi { from{opacity:0}to{opacity:1} }
         @keyframes si { from{transform:translateY(20px) scale(.97);opacity:0}to{transform:none;opacity:1} }
+        @media (max-width: 768px) {
+          .cal-grid { grid-template-columns: 30px repeat(7,1fr) !important; gap: 2px !important; }
+          .cal-headers { grid-template-columns: 30px repeat(7,1fr) !important; gap: 2px !important; }
+          .day-cell { min-height: 64px !important; padding: 4px 2px 2px !important; border-radius: 4px !important; }
+          .kw-cell { font-size: 9px !important; padding-top: 6px !important; min-height: 64px !important; }
+          .entry-bar { font-size: 10px !important; padding: 2px 4px !important; border-radius: 3px !important; margin-bottom: 1px; }
+          .detail-panel { padding: 14px !important; margin: 8px !important; }
+          .main-padding { padding: 8px !important; }
+        }
+        @media (max-width: 480px) {
+          .cal-grid { grid-template-columns: 26px repeat(7,1fr) !important; gap: 1px !important; }
+          .cal-headers { grid-template-columns: 26px repeat(7,1fr) !important; gap: 1px !important; }
+          .day-cell { min-height: 56px !important; }
+          .entry-bar { font-size: 9px !important; padding: 1px 3px !important; }
+        }
         input,textarea { background:${T.inputBg}; border:1.5px solid ${T.inputBorder}; border-radius:8px; color:${T.textPrimary}; padding:10px 12px; font-size:14px; font-family:inherit; outline:none; width:100%; transition:border-color .15s; }
         input:focus,textarea:focus { border-color:${T.inputFocus}; box-shadow:0 0 0 3px ${T.inputFocusShadow}; }
         input[type="date"]::-webkit-calendar-picker-indicator { cursor:pointer; opacity:.6; ${theme==="gold"?"filter:invert(.8) sepia(1) saturate(2) hue-rotate(5deg);":""} }
@@ -414,7 +439,7 @@ export default function Kalender() {
       <div style={{ display:"flex", flex:1 }}>
 
         {/* ── Sidebar ── */}
-        <div style={{ width:sidebarOpen?220:0, overflow:"hidden", transition:"width .2s ease", background:T.sidebar, borderRight:`1px solid ${T.sidebarBorder}`, flexShrink:0 }}>
+        <div className="sidebar-width" style={{ width:sidebarOpen?220:0, overflow:"hidden", transition:"width .2s ease", background:T.sidebar, borderRight:`1px solid ${T.sidebarBorder}`, flexShrink:0 }}>
           <div style={{ width:220, padding:"20px 12px" }}>
             <div style={{ fontSize:11, fontWeight:600, color:T.sidebarLabel, letterSpacing:1.5, textTransform:"uppercase", marginBottom:12, paddingLeft:8 }}>Benutzer</div>
             {allUsers.length===0 && <div style={{ fontSize:13, color:T.textSecondary, paddingLeft:8 }}>Noch keine Benutzer</div>}
@@ -450,9 +475,9 @@ export default function Kalender() {
         </div>
 
         {/* ── Main Calendar ── */}
-        <div style={{ flex:1, padding:"16px 20px", overflow:"auto" }}>
+        <div className="main-padding" style={{ flex:1, padding:"16px 20px", overflow:"auto" }}>
           {/* Day headers */}
-          <div style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4, marginBottom:4 }}>
+          <div className="cal-headers" style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4, marginBottom:4 }}>
             <div style={{ textAlign:"center", fontSize:11, fontWeight:700, color:T.textSecondary, padding:"6px 0" }}>KW</div>
             {DAYS.map((d,i)=>(
               <div key={d} style={{ textAlign:"center", fontSize:12, fontWeight:600, color:i>=5?T.dayNumWeekend:T.textSecondary, padding:"6px 0", letterSpacing:.5 }}>{d}</div>
@@ -460,7 +485,7 @@ export default function Kalender() {
           </div>
 
           {/* Grid */}
-          <div style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4 }}>
+          <div className="cal-grid" style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4 }}>
             {cells.map((d,i)=>{
               // Insert KW label at start of each week row
               const weekIndex = Math.floor(i / 7);
@@ -470,7 +495,7 @@ export default function Kalender() {
                 const firstRealDay = cells.slice(i, i+7).find(x => x !== null);
                 const kw = firstRealDay ? getKW(year, month, firstRealDay - 1) : "";
                 return (
-                  <div key={`kw-${weekIndex}`} style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, minHeight:100 }}>
+                  <div key={`kw-${weekIndex}`} className="kw-cell" style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, minHeight:100 }}>
                     {kw}
                   </div>
                 );
@@ -496,9 +521,7 @@ export default function Kalender() {
                     }}>{d}</div>
                   </div>
                   {dayEnts.map((e,ei)=>(
-                    <div key={ei} style={{ background:e.color, borderRadius:4, padding:"2px 6px", fontSize:11, color:"#fff", overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", fontWeight:500,
-                      boxShadow:theme==="gold"?`0 1px 4px ${e.color}66`:"none"
-                    }}>{e.title}</div>
+                    <div key={ei} className="entry-bar" style={{ background:e.color, borderRadius:4, padding:"2px 6px", fontSize:11, color:"#fff", overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", fontWeight:500, boxShadow:theme==="gold"?`0 1px 4px ${e.color}66`:"none" }}>{e.title}</div>
                   ))}
                 </div>
                 </React.Fragment>
@@ -508,7 +531,7 @@ export default function Kalender() {
 
           {/* Day detail */}
           {selectedDay && (
-            <div style={{ marginTop:20, background:T.detailBg, borderRadius:12, border:`1px solid ${T.detailBorder}`, padding:20, boxShadow:T.detailShadow }}>
+            <div className="detail-panel" style={{ marginTop:20, background:T.detailBg, borderRadius:12, border:`1px solid ${T.detailBorder}`, padding:20, boxShadow:T.detailShadow }}>
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
                 <div>
                   <div style={{ fontSize:13, color:T.textSecondary }}>{MONTHS[month]} {year}</div>
