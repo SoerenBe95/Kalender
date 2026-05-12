@@ -25,6 +25,8 @@ const COLORS = [
   "#212121","#eeeeee"
 ];
 
+const GROUPS = ["Gesamt Equities", "German Equities", "International Equities"];
+
 const BIN_ID  = import.meta.env.VITE_BIN_ID;
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
@@ -205,6 +207,9 @@ export default function Kalender() {
   const [deleteConfirm, setDeleteConfirm] = useState(null); // user key to confirm delete
   const [resetConfirm, setResetConfirm] = useState(null); // 'entries' | 'users' | null
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [activeView, setActiveView] = useState("Gesamt Equities");
+  const [groupEditor, setGroupEditor] = useState(false);
+  const [groupConfig, setGroupConfig] = useState({}); // { "German Equities": ["anna","max"], ... }
 
   const intervalRef = useRef(null);
   const dataRef     = useRef({ entries: [], userDirectory: {} });
@@ -213,12 +218,12 @@ export default function Kalender() {
     const p = loadProfile();
     if (p?.name) setUser(p); else setShowProfileSetup(true);
     fetchData().then(data => {
-      if (data) { dataRef.current = data; setEntries(data.entries ?? []); setUserDir(data.userDirectory ?? {}); }
+      if (data) { dataRef.current = data; setEntries(data.entries ?? []); setUserDir(data.userDirectory ?? {}); setGroupConfig(data.groupConfig ?? {}); }
       setLoaded(true);
     });
     intervalRef.current = setInterval(() => {
       fetchData().then(data => {
-        if (data) { dataRef.current = data; setEntries(data.entries ?? []); setUserDir(data.userDirectory ?? {}); }
+        if (data) { dataRef.current = data; setEntries(data.entries ?? []); setUserDir(data.userDirectory ?? {}); setGroupConfig(data.groupConfig ?? {}); }
       });
     }, 10000);
     return () => clearInterval(intervalRef.current);
@@ -285,6 +290,21 @@ export default function Kalender() {
     pushData(updatedData);
   };
 
+  const saveGroupConfig = (newConfig) => {
+    setGroupConfig(newConfig);
+    const updatedData = { ...dataRef.current, groupConfig: newConfig };
+    dataRef.current = updatedData;
+    pushData(updatedData);
+  };
+
+  const toggleUserInGroup = (group, userKey) => {
+    const current = groupConfig[group] ?? [];
+    const updated = current.includes(userKey)
+      ? current.filter(k => k !== userKey)
+      : [...current, userKey];
+    saveGroupConfig({ ...groupConfig, [group]: updated });
+  };
+
   const resetEntries = () => {
     const updatedData = { ...dataRef.current, entries: [] };
     dataRef.current = updatedData;
@@ -302,8 +322,22 @@ export default function Kalender() {
     pushData(updatedData);
   };
 
-  const getEntriesForDay = (dayStr) =>
-    entries.filter(e => e?.startDate && e?.endDate && dateInRange(dayStr, e.startDate, e.endDate) && !hiddenUsers.has(e.author?.toLowerCase()));
+  const getVisibleUsers = () => {
+    if (activeView === "Gesamt Equities") return null; // show all
+    const groupUsers = groupConfig[activeView] ?? [];
+    return groupUsers;
+  };
+
+  const getEntriesForDay = (dayStr) => {
+    const visibleUsers = getVisibleUsers();
+    return entries.filter(e => {
+      if (!e?.startDate || !e?.endDate) return false;
+      if (!dateInRange(dayStr, e.startDate, e.endDate)) return false;
+      if (hiddenUsers.has(e.author?.toLowerCase())) return false;
+      if (visibleUsers !== null && !visibleUsers.includes(e.author?.toLowerCase())) return false;
+      return true;
+    });
+  };
 
   const openDay      = (d) => { setSelectedDay(d); setModal(false); setEditId(null); };
   const openAddModal = () => {
@@ -419,6 +453,17 @@ export default function Kalender() {
           <span style={{ fontSize:22, fontWeight:700, color:T.calendarTitleColor, fontFamily:T.fontHeading }} className={theme==="gold"?"gold-shimmer":""}>
             {T.calendarTitle}
           </span>
+          {/* View selector */}
+          <div style={{ display:"flex", gap:4, marginLeft:8, background:theme==="gold"?"#1a1a0a":"#f0f4ff", borderRadius:20, padding:3 }}>
+            {GROUPS.map(g => (
+              <button key={g} className="btn" onClick={()=>setActiveView(g)} style={{
+                background: activeView===g ? (theme==="gold"?"#c9a84c":"#1a73e8") : "transparent",
+                color: activeView===g ? (theme==="gold"?"#0d0d0d":"#fff") : T.textSecondary,
+                borderRadius:16, padding:"5px 12px", fontSize:12, fontWeight:600, fontFamily:"inherit",
+                whiteSpace:"nowrap"
+              }}>{g}</button>
+            ))}
+          </div>
           <div style={{ display:"flex", alignItems:"center", gap:4, marginLeft:12 }}>
             <button className="btn" onClick={prevMonth} style={{ padding:"6px 10px", borderRadius:8, color:T.textSecondary, fontSize:18 }}>‹</button>
             <span style={{ fontWeight:600, fontSize:17, color:T.textPrimary, minWidth:160, textAlign:"center" }}>{MONTHS[month]} {year}</span>
@@ -471,11 +516,14 @@ export default function Kalender() {
               </button>
               {settingsOpen && (
                 <div style={{ marginTop:6, background:theme==="gold"?"#1a1a0a":"#f8f9fa", borderRadius:8, border:`1px solid ${T.btnBorder}`, overflow:"hidden" }}>
+                  <button className="btn" onClick={()=>{setGroupEditor(true);setSettingsOpen(false);}} style={{ width:"100%", background:"none", color:T.textSecondary, padding:"10px 12px", fontFamily:"inherit", fontSize:13, textAlign:"left", borderBottom:`1px solid ${T.btnBorder}` }}>
+                    👥 Gruppeneinteilung
+                  </button>
                   <button className="btn" onClick={()=>{setResetConfirm('entries');setSettingsOpen(false);}} style={{ width:"100%", background:"none", color:"#e74c3c", padding:"10px 12px", fontFamily:"inherit", fontSize:13, textAlign:"left", borderBottom:`1px solid ${T.btnBorder}` }}>
                     🗑 Alle Einträge löschen
                   </button>
                   <button className="btn" onClick={()=>{setResetConfirm('users');setSettingsOpen(false);}} style={{ width:"100%", background:"none", color:T.textSecondary, padding:"10px 12px", fontFamily:"inherit", fontSize:13, textAlign:"left" }}>
-                    👥 Alle User löschen
+                    🗑 Alle User löschen
                   </button>
                 </div>
               )}
@@ -500,11 +548,18 @@ export default function Kalender() {
               const weekIndex = Math.floor(i / 7);
               const dayInWeek = i % 7;
               const kwEl = dayInWeek === 0 ? (() => {
-                const firstRealDay = cells.slice(i, i+7).find(x => x !== null);
+                const weekCells = cells.slice(i, i+7);
+                const realDays = weekCells.filter(x => x !== null);
+                // Only show KW if Monday of this week is a real day (not a leading empty week)
+                const mondayIsReal = weekCells[0] !== null;
+                const hasAnyReal = realDays.length > 0;
+                // Show KW only if Monday is real, OR if this week has more real days than empty days (majority)
+                const showKW = mondayIsReal || realDays.length >= 4;
+                const firstRealDay = realDays[0];
                 const kw = firstRealDay ? getKW(year, month, firstRealDay - 1) : "";
                 return (
                   <div key={`kw-${weekIndex}`} className="kw-cell" style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, minHeight:100 }}>
-                    {kw}
+                    {showKW ? kw : ""}
                   </div>
                 );
               })() : null;
@@ -667,6 +722,42 @@ export default function Kalender() {
                 {showProfileSetup?"Los geht's →":"Speichern"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Group Editor Modal ── */}
+      {groupEditor && (
+        <div className="mbg" onClick={()=>setGroupEditor(false)} style={{ position:"fixed", inset:0, background:T.modalOverlay, display:"flex", alignItems:"center", justifyContent:"center", zIndex:300, backdropFilter:"blur(3px)" }}>
+          <div className="mbox" onClick={e=>e.stopPropagation()} style={{ background:T.modalBg, borderRadius:16, padding:28, width:"90%", maxWidth:520, boxShadow:"0 8px 40px rgba(0,0,0,.3)", border:theme==="gold"?"1px solid #3a3020":"none", maxHeight:"80vh", overflowY:"auto" }}>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20 }}>
+              <div style={{ fontWeight:700, fontSize:18, color:T.textPrimary }}>👥 Gruppeneinteilung</div>
+              <button className="btn" onClick={()=>setGroupEditor(false)} style={{ color:T.textSecondary, fontSize:20, padding:4 }}>✕</button>
+            </div>
+            <div style={{ fontSize:13, color:T.textSecondary, marginBottom:20 }}>Ein User kann in mehreren Gruppen gleichzeitig sein.</div>
+            {GROUPS.filter(g => g !== "Gesamt Equities").map(group => (
+              <div key={group} style={{ marginBottom:20 }}>
+                <div style={{ fontSize:13, fontWeight:700, color:T.accent, marginBottom:10, paddingBottom:6, borderBottom:`1px solid ${T.btnBorder}` }}>{group}</div>
+                <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+                  {allUsers.map(u => {
+                    const inGroup = (groupConfig[group] ?? []).includes(u.key);
+                    return (
+                      <div key={u.key} onClick={()=>toggleUserInGroup(group, u.key)} style={{
+                        display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:20,
+                        border:`2px solid ${inGroup ? u.color : T.btnBorder}`,
+                        background: inGroup ? u.color+"22" : "transparent",
+                        cursor:"pointer", transition:"all .15s"
+                      }}>
+                        <div style={{ width:10, height:10, borderRadius:"50%", background:u.color }}/>
+                        <span style={{ fontSize:13, fontWeight:inGroup?600:400, color:inGroup?T.textPrimary:T.textSecondary }}>{u.name}</span>
+                        {inGroup && <span style={{ fontSize:10, color:u.color }}>✓</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+            <button className="btn" onClick={()=>setGroupEditor(false)} style={{ width:"100%", background:T.accent, color:theme==="gold"?"#0d0d0d":"#fff", borderRadius:10, padding:"12px", fontFamily:"inherit", fontSize:14, fontWeight:600, marginTop:8 }}>Fertig</button>
           </div>
         </div>
       )}
