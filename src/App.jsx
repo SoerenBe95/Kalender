@@ -61,11 +61,11 @@ function fmtDate(str) {
 }
 function dateInRange(date, start, end) { return date >= start && date <= end; }
 function getKW(year, month, day) {
-  const d = new Date(year, month, day);
-  const startOfYear = new Date(d.getFullYear(), 0, 1);
-  const dayOfYear = Math.floor((d - startOfYear) / 86400000);
-  const dayOfWeek = startOfYear.getDay() || 7;
-  return Math.ceil((dayOfYear + dayOfWeek) / 7);
+  const d = new Date(Date.UTC(year, month, day));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 function loadProfile() {
   try { return JSON.parse(localStorage.getItem("kal-profile")) ?? null; } catch { return null; }
@@ -198,6 +198,7 @@ export default function Kalender() {
   const [profileForm, setProfileForm]           = useState({ name: "", color: COLORS[2] });
   const [showProfileEditor, setShowProfileEditor] = useState(false);
   const [nameHint, setNameHint]                 = useState(null);
+  const [colorTakenWarning, setColorTakenWarning] = useState(null);
 
   const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 768);
   const [hiddenUsers, setHiddenUsers] = useState(new Set());
@@ -242,6 +243,13 @@ export default function Kalender() {
   const saveProfileHandler = () => {
     const name = profileForm.name.trim();
     if (!name) return;
+    // Check if color is already taken by another user
+    const takenBy = Object.entries(userDir).find(([k, v]) => v === profileForm.color && k !== name.toLowerCase());
+    if (takenBy) {
+      setColorTakenWarning(takenBy[0].charAt(0).toUpperCase() + takenBy[0].slice(1));
+      return;
+    }
+    setColorTakenWarning(null);
     const p = { name, color: profileForm.color };
     setUser(p); saveProfile(p); setNameHint(null);
     const updatedDir = { ...dataRef.current.userDirectory, [name.toLowerCase()]: profileForm.color };
@@ -255,6 +263,7 @@ export default function Kalender() {
     const knownColor = userDir[v.trim().toLowerCase()];
     setNameHint(knownColor ? "known" : null);
     setProfileForm(f => ({ ...f, name: v, ...(knownColor ? { color: knownColor } : {}) }));
+    setColorTakenWarning(null);
   };
 
   const toggleUser = (key) => {
@@ -491,7 +500,6 @@ export default function Kalender() {
               const weekIndex = Math.floor(i / 7);
               const dayInWeek = i % 7;
               const kwEl = dayInWeek === 0 ? (() => {
-                // find first real day in this week
                 const firstRealDay = cells.slice(i, i+7).find(x => x !== null);
                 const kw = firstRealDay ? getKW(year, month, firstRealDay - 1) : "";
                 return (
@@ -500,7 +508,7 @@ export default function Kalender() {
                   </div>
                 );
               })() : null;
-              if(!d) return <>{kwEl}{kwEl===null?<div key={i} style={{ minHeight:100 }}/>:null}</>;
+              if(!d) return <React.Fragment key={`empty-${i}`}>{kwEl}<div style={{ minHeight:100 }}/></React.Fragment>;
               const dayStr  = toDateStr(year,month,d);
               const dayEnts = getEntriesForDay(dayStr);
               const isSel   = selectedDay===d;
@@ -620,6 +628,7 @@ export default function Kalender() {
                 <label style={{ fontSize:12, fontWeight:600, color:T.textSecondary, display:"block", marginBottom:6 }}>DEIN NAME *</label>
                 <input placeholder="z.B. Anna, Max…" value={profileForm.name} onChange={e=>handleNameChange(e.target.value)} autoFocus/>
                 {nameHint==="known" && <div style={{ marginTop:8, fontSize:12, color:T.syncColor, background:theme==="gold"?"#0a1a0a":"#e6f4ea", borderRadius:6, padding:"8px 12px" }}>✓ Name erkannt — deine Farbe wurde automatisch gesetzt.</div>}
+                {colorTakenWarning && <div style={{ marginTop:8, fontSize:12, color:"#e74c3c", background:theme==="gold"?"#2a0a0a":"#fce8e6", borderRadius:6, padding:"8px 12px" }}>⚠ Diese Farbe ist bereits von <strong>{colorTakenWarning}</strong> belegt — bitte wähle eine andere.</div>}
               </div>
               <div>
                 <label style={{ fontSize:12, fontWeight:600, color:T.textSecondary, display:"block", marginBottom:10 }}>DEINE FARBE</label>
