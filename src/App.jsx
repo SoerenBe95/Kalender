@@ -63,9 +63,10 @@ function fmtDate(str) {
 }
 function dateInRange(date, start, end) { return date >= start && date <= end; }
 function getKW(year, month, day) {
+  // month is 0-indexed in JS, day is 1-indexed (the actual calendar day)
   const d = new Date(Date.UTC(year, month, day));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const dayNum = d.getUTCDay() || 7; // Mon=1 ... Sun=7
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum); // shift to Thursday of this week
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
@@ -342,28 +343,48 @@ export default function Kalender() {
   const openDay      = (d) => { setSelectedDay(d); setModal(false); setEditId(null); };
   const openAddModal = () => {
     const def = toDateStr(year, month, selectedDay);
-    setForm({ title: "", startDate: def, endDate: def, note: "" });
+    setForm({ title: "", startDate: def, endDate: def, note: "", authors: user ? [user.name.toLowerCase()] : [] });
     setEditId(null); setModal(true);
   };
   const openEditModal = (entry) => {
-    setForm({ title: entry.title, startDate: entry.startDate, endDate: entry.endDate, note: entry.note || "" });
+    setForm({ title: entry.title, startDate: entry.startDate, endDate: entry.endDate, note: entry.note || "", authors: entry.author ? [entry.author.toLowerCase()] : [] });
     setEditId(entry.id); setModal(true);
   };
 
   const saveEntry = () => {
     if (!form.title.trim() || !form.startDate || !form.endDate || !user) return;
+    if (!form.authors || form.authors.length === 0) return;
     const start = form.startDate <= form.endDate ? form.startDate : form.endDate;
     const end   = form.startDate <= form.endDate ? form.endDate   : form.startDate;
-    const entry = { title: form.title.trim(), startDate: start, endDate: end, note: form.note, color: user.color, author: user.name };
-    const updated = editId
-      ? dataRef.current.entries.map(e => e.id === editId ? { ...entry, id: editId } : e)
-      : [...dataRef.current.entries, { ...entry, id: Date.now().toString() }];
-    // Auto-register user in shared directory if not already there
+    const dir = dataRef.current.userDirectory;
+    let updated;
+    if (editId) {
+      // For edits: just update the existing entry, take first author
+      const authorKey = form.authors[0];
+      const authorName = authorKey.charAt(0).toUpperCase() + authorKey.slice(1);
+      const authorColor = dir[authorKey] || user.color;
+      const entry = { title: form.title.trim(), startDate: start, endDate: end, note: form.note, color: authorColor, author: authorName };
+      updated = dataRef.current.entries.map(e => e.id === editId ? { ...entry, id: editId } : e);
+    } else {
+      // For new entries: create one entry per selected author
+      const newEntries = form.authors.map((authorKey, idx) => {
+        const authorName = authorKey.charAt(0).toUpperCase() + authorKey.slice(1);
+        const authorColor = dir[authorKey] || user.color;
+        return {
+          title: form.title.trim(),
+          startDate: start, endDate: end,
+          note: form.note,
+          color: authorColor,
+          author: authorName,
+          id: (Date.now() + idx).toString()
+        };
+      });
+      updated = [...dataRef.current.entries, ...newEntries];
+    }
+    // Ensure current user is in directory
     const userKey = user.name.toLowerCase();
-    const updatedDir = dataRef.current.userDirectory[userKey]
-      ? dataRef.current.userDirectory
-      : { ...dataRef.current.userDirectory, [userKey]: user.color };
-    if (!dataRef.current.userDirectory[userKey]) setUserDir(updatedDir);
+    const updatedDir = dir[userKey] ? dir : { ...dir, [userKey]: user.color };
+    if (!dir[userKey]) setUserDir(updatedDir);
     const updatedData = { ...dataRef.current, entries: updated, userDirectory: updatedDir };
     dataRef.current = updatedData; setEntries(updated);
     setModal(false); setEditId(null);
@@ -391,7 +412,7 @@ export default function Kalender() {
   const isToday         = (d) => toDateStr(year, month, d) === todayStr;
   const selectedDayStr  = selectedDay ? toDateStr(year, month, selectedDay) : null;
   const selectedEntries = selectedDayStr ? getEntriesForDay(selectedDayStr) : [];
-  const canSave         = form.title.trim() && form.startDate && form.endDate;
+  const canSave         = form.title.trim() && form.startDate && form.endDate && form.authors && form.authors.length > 0;
 
   const allUsers = Object.entries(userDir).map(([key, color]) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1), color, key
@@ -556,7 +577,7 @@ export default function Kalender() {
                 // Show KW only if Monday is real, OR if this week has more real days than empty days (majority)
                 const showKW = mondayIsReal || realDays.length >= 4;
                 const firstRealDay = realDays[0];
-                const kw = firstRealDay ? getKW(year, month, firstRealDay - 1) : "";
+                const kw = firstRealDay ? getKW(year, month, firstRealDay) : "";
                 return (
                   <div key={`kw-${weekIndex}`} className="kw-cell" style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, minHeight:100 }}>
                     {showKW ? kw : ""}
@@ -635,10 +656,30 @@ export default function Kalender() {
         <div className="mbg" onClick={()=>setModal(false)} style={{ position:"fixed", inset:0, background:T.modalOverlay, display:"flex", alignItems:"center", justifyContent:"center", zIndex:100, backdropFilter:"blur(3px)" }}>
           <div className="mbox" onClick={e=>e.stopPropagation()} style={{ background:T.modalBg, borderRadius:16, padding:28, width:"90%", maxWidth:460, boxShadow:"0 8px 40px rgba(0,0,0,.3)", border:theme==="gold"?`1px solid #3a3020`:"none" }}>
             <div style={{ fontWeight:700, fontSize:18, color:T.textPrimary, marginBottom:4 }}>{editId?"Eintrag bearbeiten":"Neuer Eintrag"}</div>
-            {user && <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:18 }}>
-              <div style={{ width:8, height:8, borderRadius:"50%", background:user.color }}/>
-              <span style={{ fontSize:12, color:T.textSecondary }}>Als {user.name}</span>
-            </div>}
+            {user && allUsers.length > 0 && (
+              <div style={{ marginBottom:18 }}>
+                <label style={{ fontSize:12, fontWeight:600, color:T.textSecondary, display:"block", marginBottom:8 }}>FÜR WEN? ({form.authors?.length || 0} ausgewählt)</label>
+                <div style={{ display:"flex", flexWrap:"wrap", gap:6, maxHeight:120, overflowY:"auto", padding:"4px 0" }}>
+                  {allUsers.map(u => {
+                    const selected = form.authors?.includes(u.key);
+                    return (
+                      <div key={u.key} onClick={()=>setForm(f=>({...f, authors: selected ? f.authors.filter(a=>a!==u.key) : [...(f.authors||[]), u.key]}))} style={{
+                        display:"flex", alignItems:"center", gap:6,
+                        padding:"4px 10px", borderRadius:14,
+                        border:`2px solid ${selected ? u.color : T.btnBorder}`,
+                        background: selected ? u.color+"22" : "transparent",
+                        cursor:"pointer", fontSize:12, transition:"all .15s"
+                      }}>
+                        <div style={{ width:8, height:8, borderRadius:"50%", background:u.color }}/>
+                        <span style={{ color: selected ? T.textPrimary : T.textSecondary, fontWeight: selected ? 600 : 400 }}>{u.name}</span>
+                        {selected && <span style={{ fontSize:10, color:u.color }}>✓</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+                {editId && <div style={{ fontSize:11, color:T.textSecondary, marginTop:6, fontStyle:"italic" }}>Bei Bearbeitung wird nur der erste ausgewählte User übernommen.</div>}
+              </div>
+            )}
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
               <div>
                 <label style={{ fontSize:12, fontWeight:600, color:T.textSecondary, display:"block", marginBottom:6 }}>TITEL *</label>
