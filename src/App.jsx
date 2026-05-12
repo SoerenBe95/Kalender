@@ -419,10 +419,17 @@ export default function Kalender() {
   })).sort((a, b) => a.name.localeCompare(b.name));
 
   // Gold theme decorative gradient
+  const BG_IMAGES = [
+    '/image.png',
+    '/bg1.png', '/bg2.png', '/bg3.png', '/bg4.png', '/bg7.png',
+    '/bg5.jpg', '/bg6.jpg', '/bg8.jpg'
+  ];
+  const [randomBg] = useState(() => BG_IMAGES[Math.floor(Math.random() * BG_IMAGES.length)]);
+
   const goldBg = theme === "gold"
     ? `radial-gradient(ellipse at 20% 0%, #1a150088 0%, transparent 50%),
        radial-gradient(ellipse at 80% 100%, #1a0d0088 0%, transparent 50%),
-       url('/image.png')`
+       url('${randomBg}')`
     : T.bg;
 
   const inp = { background: T.inputBg, border: `1.5px solid ${T.inputBorder}`, borderRadius: 8, color: T.textPrimary, padding: "10px 12px", fontSize: 14, fontFamily: "inherit", outline: "none", width: "100%", transition: "border-color .15s" };
