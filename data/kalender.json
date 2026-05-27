@@ -656,6 +656,15 @@
       "color": "#212121",
       "author": "Micha",
       "id": "1779691109889"
+    },
+    {
+      "title": "Urlaub",
+      "startDate": "2026-09-10",
+      "endDate": "2026-09-25",
+      "note": "",
+      "color": "#546e7a",
+      "author": "Alex",
+      "id": "1779912770239"
     }
   ],
   "userDirectory": {
