@@ -34,6 +34,13 @@ const GITHUB_API   = `https://api.github.com/repos/${GITHUB_REPO}/contents/${DAT
 
 let currentSha = null;
 
+function encodeBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function decodeBase64(str) {
+  return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))));
+}
+
 async function fetchData() {
   try {
     const res = await fetch(GITHUB_API + "?t=" + Date.now(), {
@@ -42,14 +49,14 @@ async function fetchData() {
     if (!res.ok) return null;
     const json = await res.json();
     currentSha = json.sha;
-    const decoded = JSON.parse(atob(json.content.replace(/\n/g, '')));
+    const decoded = JSON.parse(decodeBase64(json.content));
     return decoded;
   } catch { return null; }
 }
 
 async function pushData(data) {
   try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const encoded = encodeBase64(JSON.stringify(data, null, 2));
     const res = await fetch(GITHUB_API, {
       method: "PUT",
       headers: {
@@ -57,7 +64,7 @@ async function pushData(data) {
         "Accept": "application/vnd.github.v3+json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ message: "Kalender update", content, sha: currentSha })
+      body: JSON.stringify({ message: "Kalender update", content: encoded, sha: currentSha })
     });
     if (res.ok) {
       const json = await res.json();
