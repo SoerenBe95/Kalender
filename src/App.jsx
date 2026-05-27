@@ -27,24 +27,42 @@ const COLORS = [
 
 const GROUPS = ["Gesamt Equities", "German Equities", "International Equities"];
 
-const BIN_ID  = import.meta.env.VITE_BIN_ID;
-const API_KEY = import.meta.env.VITE_API_KEY;
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
+const GITHUB_REPO  = import.meta.env.VITE_GITHUB_REPO;
+const DATA_FILE    = "data/kalender.json";
+const GITHUB_API   = `https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE}`;
+
+let currentSha = null;
 
 async function fetchData() {
   try {
-    const res = await fetch(BIN_URL + "/latest", { headers: { "X-Master-Key": API_KEY } });
+    const res = await fetch(GITHUB_API + "?t=" + Date.now(), {
+      headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Accept": "application/vnd.github.v3+json" }
+    });
+    if (!res.ok) return null;
     const json = await res.json();
-    return json.record ?? { entries: [], userDirectory: {} };
+    currentSha = json.sha;
+    const decoded = JSON.parse(atob(json.content.replace(/\n/g, '')));
+    return decoded;
   } catch { return null; }
 }
+
 async function pushData(data) {
   try {
-    await fetch(BIN_URL, {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const res = await fetch(GITHUB_API, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", "X-Master-Key": API_KEY },
-      body: JSON.stringify(data)
+      headers: {
+        "Authorization": `token ${GITHUB_TOKEN}`,
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: "Kalender update", content, sha: currentSha })
     });
+    if (res.ok) {
+      const json = await res.json();
+      currentSha = json.content.sha;
+    }
   } catch {}
 }
 
@@ -226,7 +244,7 @@ export default function Kalender() {
       fetchData().then(data => {
         if (data) { dataRef.current = data; setEntries(data.entries ?? []); setUserDir(data.userDirectory ?? {}); setGroupConfig(data.groupConfig ?? {}); }
       });
-    }, 10000);
+    }, 120000); // 2 Minuten - GitHub API schonen
     return () => clearInterval(intervalRef.current);
   }, []);
 
