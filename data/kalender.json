@@ -1,668 +1,93 @@
 {
   "entries": [
-    {
-      "title": "Joe",
-      "startDate": "2026-05-11",
-      "endDate": "2026-05-12",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht International",
-      "id": "1778149365207"
-    },
-    {
-      "title": "Thomas",
-      "startDate": "2026-05-13",
-      "endDate": "2026-05-15",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht International",
-      "id": "1778149374207"
-    },
-    {
-      "title": "Alex + Ricardo",
-      "startDate": "2026-05-18",
-      "endDate": "2026-05-22",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht International",
-      "id": "1778149390128"
-    },
-    {
-      "title": "Ishak",
-      "startDate": "2026-05-25",
-      "endDate": "2026-05-27",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht International",
-      "id": "1778149417674"
-    },
-    {
-      "title": "Mick",
-      "startDate": "2026-05-28",
-      "endDate": "2026-05-28",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778149426249"
-    },
-    {
-      "title": "SÃÂÃÂ¶ren",
-      "startDate": "2026-05-15",
-      "endDate": "2026-05-15",
-      "note": "",
-      "color": "#b0bec5",
-      "author": "SÃÂÃÂ¶ren",
-      "id": "1778149505989"
-    },
-    {
-      "title": "SÃÂÃÂ¶ren",
-      "startDate": "2026-05-20",
-      "endDate": "2026-05-21",
-      "note": "",
-      "color": "#b0bec5",
-      "author": "SÃÂÃÂ¶ren",
-      "id": "1778149524844"
-    },
-    {
-      "title": "Thomas Urlaub",
-      "startDate": "2026-05-25",
-      "endDate": "2026-05-29",
-      "note": "",
-      "color": "#00e5ff",
-      "author": "Thomas",
-      "id": "1778154100981"
-    },
-    {
-      "title": "Urlaub Julian",
-      "startDate": "2026-05-08",
-      "endDate": "2026-05-15",
-      "note": "",
-      "color": "#00e5ff",
-      "author": "Thomas",
-      "id": "1778154149773"
-    },
-    {
-      "title": "Urlaub Julian",
-      "startDate": "2026-05-29",
-      "endDate": "2026-05-29",
-      "note": "",
-      "color": "#42a5f5",
-      "author": "J Fritz",
-      "id": "1778154200266"
-    },
-    {
-      "title": "Thorsten",
-      "startDate": "2026-05-04",
-      "endDate": "2026-05-08",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht German",
-      "id": "1778154859545"
-    },
-    {
-      "title": "Peter",
-      "startDate": "2026-05-14",
-      "endDate": "2026-05-15",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht German",
-      "id": "1778154891939"
-    },
-    {
-      "title": "Tim geht um 12 Uhr",
-      "startDate": "2026-05-22",
-      "endDate": "2026-05-22",
-      "note": "",
-      "color": "#fdd835",
-      "author": "Tim",
-      "id": "1778156842604"
-    },
-    {
-      "title": "Tim Urlaub",
-      "startDate": "2026-05-28",
-      "endDate": "2026-05-29",
-      "note": "",
-      "color": "#fdd835",
-      "author": "Tim",
-      "id": "1778156856687"
-    },
-    {
-      "title": "Tim Urlaub",
-      "startDate": "2026-08-10",
-      "endDate": "2026-08-14",
-      "note": "",
-      "color": "#fdd835",
-      "author": "Tim",
-      "id": "1778156925051"
-    },
-    {
-      "title": "Tim Urlaub",
-      "startDate": "2026-12-15",
-      "endDate": "2027-01-11",
-      "note": "",
-      "color": "#fdd835",
-      "author": "Tim",
-      "id": "1778156982903"
-    },
-    {
-      "title": "Samu arbeitet",
-      "startDate": "2026-05-11",
-      "endDate": "2026-05-11",
-      "note": "",
-      "color": "#00897b",
-      "author": "SchrÃÂÃÂ¶ggy",
-      "id": "1778263061798"
-    },
-    {
-      "title": "SocGenSchiff",
-      "startDate": "2026-05-28",
-      "endDate": "2026-05-28",
-      "note": "",
-      "color": "#fb8c00",
-      "author": "Events",
-      "id": "1778571668682"
-    },
-    {
-      "title": "Urlaub Micha",
-      "startDate": "2026-06-05",
-      "endDate": "2026-06-05",
-      "note": "",
-      "color": "#212121",
-      "author": "Micha",
-      "id": "1778571808425"
-    },
-    {
-      "title": "Micha Urlaub",
-      "startDate": "2026-06-22",
-      "endDate": "2026-06-26",
-      "note": "",
-      "color": "#212121",
-      "author": "Micha",
-      "id": "1778571888098"
-    },
-    {
-      "title": "Dorant Urlaub",
-      "startDate": "2026-05-20",
-      "endDate": "2026-05-27",
-      "note": "",
-      "color": "#e53935",
-      "author": "Dorant",
-      "id": "1778572460611"
-    },
-    {
-      "title": "Niklas Urlaub",
-      "startDate": "2026-05-15",
-      "endDate": "2026-05-15",
-      "note": "",
-      "color": "#69f0ae",
-      "author": "Niklas",
-      "id": "1778572506423"
-    },
-    {
-      "title": "Niklas Xetra PrÃÂÃÂ¼fung",
-      "startDate": "2026-05-13",
-      "endDate": "2026-05-13",
-      "note": "",
-      "color": "#69f0ae",
-      "author": "Niklas",
-      "id": "1778572522191"
-    },
-    {
-      "title": "Niklas Urlaub",
-      "startDate": "2026-10-26",
-      "endDate": "2026-10-30",
-      "note": "",
-      "color": "#69f0ae",
-      "author": "Niklas",
-      "id": "1778572560169"
-    },
-    {
-      "title": "Niklas Urlaub (noch nicht genehmigt)",
-      "startDate": "2026-08-17",
-      "endDate": "2026-09-08",
-      "note": "",
-      "color": "#69f0ae",
-      "author": "Niklas",
-      "id": "1778572639214"
-    },
-    {
-      "title": "Thorsten Urlaub",
-      "startDate": "2026-05-14",
-      "endDate": "2026-05-14",
-      "note": "",
-      "color": "#f4511e",
-      "author": "Thorsten",
-      "id": "1778572852334"
-    },
-    {
-      "title": "Marco",
-      "startDate": "2026-06-01",
-      "endDate": "2026-06-05",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573059202"
-    },
-    {
-      "title": "Mick",
-      "startDate": "2026-06-08",
-      "endDate": "2026-06-10",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573123395"
-    },
-    {
-      "title": "Ishak",
-      "startDate": "2026-06-11",
-      "endDate": "2026-06-12",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573132926"
-    },
-    {
-      "title": "Julian",
-      "startDate": "2026-06-15",
-      "endDate": "2026-06-19",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573155228"
-    },
-    {
-      "title": "Thomas",
-      "startDate": "2026-06-22",
-      "endDate": "2026-06-26",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573178391"
-    },
-    {
-      "title": "Alex",
-      "startDate": "2026-06-29",
-      "endDate": "2026-07-03",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573211639"
-    },
-    {
-      "title": "Joe",
-      "startDate": "2026-07-06",
-      "endDate": "2026-07-10",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573367076"
-    },
-    {
-      "title": "Marco",
-      "startDate": "2026-07-13",
-      "endDate": "2026-07-17",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573378620"
-    },
-    {
-      "title": "Ishak",
-      "startDate": "2026-07-20",
-      "endDate": "2026-07-24",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573392845"
-    },
-    {
-      "title": "Ricardo+SÃÂÃÂ¶ren",
-      "startDate": "2026-07-27",
-      "endDate": "2026-07-31",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1778573408334"
-    },
-    {
-      "title": "Urlaub Micha",
-      "startDate": "2026-08-31",
-      "endDate": "2026-09-20",
-      "note": "",
-      "color": "#212121",
-      "author": "Micha",
-      "id": "1778573547440"
-    },
-    {
-      "title": "TIM GE",
-      "startDate": "2026-06-01",
-      "endDate": "2026-06-03",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778594439893"
-    },
-    {
-      "title": "Dorant",
-      "startDate": "2026-06-04",
-      "endDate": "2026-06-05",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778594486117"
-    },
-    {
-      "title": "Tim",
-      "startDate": "2026-05-11",
-      "endDate": "2026-05-13",
-      "note": "",
-      "color": "#fdd835",
-      "author": "Tim",
-      "id": "1778821683592"
-    },
-    {
-      "title": "Tim",
-      "startDate": "2026-05-11",
-      "endDate": "2026-05-13",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778821683593"
-    },
-    {
-      "title": "Manu",
-      "startDate": "2026-05-18",
-      "endDate": "2026-05-22",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778821785667"
-    },
-    {
-      "title": "Bernd",
-      "startDate": "2026-05-25",
-      "endDate": "2026-05-29",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778821812220"
-    },
-    {
-      "title": "Peter",
-      "startDate": "2026-06-08",
-      "endDate": "2026-06-10",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822268548"
-    },
-    {
-      "title": "Dorant",
-      "startDate": "2026-06-11",
-      "endDate": "2026-06-12",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822290125"
-    },
-    {
-      "title": "Thorsten",
-      "startDate": "2026-06-15",
-      "endDate": "2026-06-19",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822309349"
-    },
-    {
-      "title": "Bernd",
-      "startDate": "2026-06-22",
-      "endDate": "2026-06-26",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822347975"
-    },
-    {
-      "title": "Manu",
-      "startDate": "2026-06-29",
-      "endDate": "2026-07-03",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822376048"
-    },
-    {
-      "title": "Peter",
-      "startDate": "2026-07-06",
-      "endDate": "2026-07-10",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822405529"
-    },
-    {
-      "title": "Tim",
-      "startDate": "2026-07-13",
-      "endDate": "2026-07-17",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822425393"
-    },
-    {
-      "title": "Dorant",
-      "startDate": "2026-07-20",
-      "endDate": "2026-07-24",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822447082"
-    },
-    {
-      "title": "Thorsten",
-      "startDate": "2026-07-27",
-      "endDate": "2026-07-31",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822471331"
-    },
-    {
-      "title": "Bernd",
-      "startDate": "2026-08-03",
-      "endDate": "2026-08-07",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822500459"
-    },
-    {
-      "title": "Dorant",
-      "startDate": "2026-08-10",
-      "endDate": "2026-08-11",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822525557"
-    },
-    {
-      "title": "Peter",
-      "startDate": "2026-08-12",
-      "endDate": "2026-08-14",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822538644"
-    },
-    {
-      "title": "Manu",
-      "startDate": "2026-08-17",
-      "endDate": "2026-08-21",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822562822"
-    },
-    {
-      "title": "Tim",
-      "startDate": "2026-08-24",
-      "endDate": "2026-08-28",
-      "note": "",
-      "color": "#6d4c41",
-      "author": "SpÃÂÃÂ¤tschicht german",
-      "id": "1778822595056"
-    },
-    {
-      "title": "Dorant Urlaub",
-      "startDate": "2026-07-02",
-      "endDate": "2026-07-03",
-      "note": "",
-      "color": "#e53935",
-      "author": "Dorant",
-      "id": "1779089749705"
-    },
-    {
-      "title": "Thomas Urlaub",
-      "startDate": "2026-06-15",
-      "endDate": "2026-06-19",
-      "note": "",
-      "color": "#00e5ff",
-      "author": "Thomas",
-      "id": "1779094109311"
-    },
-    {
-      "title": "Thomas Urlaub",
-      "startDate": "2026-07-20",
-      "endDate": "2026-07-24",
-      "note": "",
-      "color": "#00e5ff",
-      "author": "Thomas",
-      "id": "1779094145248"
-    },
-    {
-      "title": "Marco Urlaub",
-      "startDate": "2026-06-22",
-      "endDate": "2026-06-26",
-      "note": "",
-      "color": "#1565c0",
-      "author": "Marco",
-      "id": "1779098274638"
-    },
-    {
-      "title": "Thomas Urlaub",
-      "startDate": "2026-05-22",
-      "endDate": "2026-05-22",
-      "note": "",
-      "color": "#00e5ff",
-      "author": "Thomas",
-      "id": "1779107397512"
-    },
-    {
-      "title": "Joe",
-      "startDate": "2026-05-29",
-      "endDate": "2026-05-29",
-      "note": "",
-      "color": "#8e24aa",
-      "author": "SpÃÂÃÂ¤tschicht international",
-      "id": "1779107811010"
-    },
-    {
-      "title": "Samu arbeitet",
-      "startDate": "2026-05-19",
-      "endDate": "2026-05-19",
-      "note": "",
-      "color": "#00897b",
-      "author": "SchrÃÂÃÂ¶ggy",
-      "id": "1779113715908"
-    },
-    {
-      "title": "Samu arbeitet",
-      "startDate": "2026-05-18",
-      "endDate": "2026-05-18",
-      "note": "",
-      "color": "#00897b",
-      "author": "SchrÃÂÃÂ¶ggy",
-      "id": "1779113750222"
-    },
-    {
-      "title": "Urlaub Ishak",
-      "startDate": "2026-06-01",
-      "endDate": "2026-06-05",
-      "note": "",
-      "color": "#00c853",
-      "author": "Ishak",
-      "id": "1779427614807"
-    },
-    {
-      "title": "Peter Urlaub",
-      "startDate": "2026-05-29",
-      "endDate": "2026-05-29",
-      "note": "",
-      "color": "#a1887f",
-      "author": "Peter",
-      "id": "1779439400562"
-    },
-    {
-      "title": "Peter Urlaub",
-      "startDate": "2026-06-26",
-      "endDate": "2026-06-29",
-      "note": "",
-      "color": "#a1887f",
-      "author": "Peter",
-      "id": "1779439561196"
-    },
-    {
-      "title": "Peter Urlaub",
-      "startDate": "2026-08-03",
-      "endDate": "2026-08-10",
-      "note": "",
-      "color": "#a1887f",
-      "author": "Peter",
-      "id": "1779439652100"
-    },
-    {
-      "title": "Peter Urlaub",
-      "startDate": "2026-09-14",
-      "endDate": "2026-09-25",
-      "note": "",
-      "color": "#a1887f",
-      "author": "Peter",
-      "id": "1779439695462"
-    },
-    {
-      "title": "Peter Urlaub",
-      "startDate": "2026-12-28",
-      "endDate": "2026-12-30",
-      "note": "",
-      "color": "#a1887f",
-      "author": "Peter",
-      "id": "1779439753280"
-    },
-    {
-      "title": "Micha Urlaub",
-      "startDate": "2026-07-06",
-      "endDate": "2026-07-10",
-      "note": "",
-      "color": "#212121",
-      "author": "Micha",
-      "id": "1779864386011"
-    }
+    {"title":"Joe","startDate":"2026-05-11","endDate":"2026-05-12","note":"","color":"#8e24aa","author":"Spätschicht International","id":"1778149365207"},
+    {"title":"Thomas","startDate":"2026-05-13","endDate":"2026-05-15","note":"","color":"#8e24aa","author":"Spätschicht International","id":"1778149374207"},
+    {"title":"Alex + Ricardo","startDate":"2026-05-18","endDate":"2026-05-22","note":"","color":"#8e24aa","author":"Spätschicht International","id":"1778149390128"},
+    {"title":"Ishak","startDate":"2026-05-25","endDate":"2026-05-27","note":"","color":"#8e24aa","author":"Spätschicht International","id":"1778149417674"},
+    {"title":"Mick","startDate":"2026-05-28","endDate":"2026-05-28","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778149426249"},
+    {"title":"Sören","startDate":"2026-05-15","endDate":"2026-05-15","note":"","color":"#b0bec5","author":"Sören","id":"1778149505989"},
+    {"title":"Sören","startDate":"2026-05-20","endDate":"2026-05-21","note":"","color":"#b0bec5","author":"Sören","id":"1778149524844"},
+    {"title":"Thomas Urlaub","startDate":"2026-05-25","endDate":"2026-05-29","note":"","color":"#00e5ff","author":"Thomas","id":"1778154100981"},
+    {"title":"Urlaub Julian","startDate":"2026-05-08","endDate":"2026-05-15","note":"","color":"#00e5ff","author":"Thomas","id":"1778154149773"},
+    {"title":"Urlaub Julian","startDate":"2026-05-29","endDate":"2026-05-29","note":"","color":"#42a5f5","author":"J Fritz","id":"1778154200266"},
+    {"title":"Thorsten","startDate":"2026-05-04","endDate":"2026-05-08","note":"","color":"#6d4c41","author":"Spätschicht German","id":"1778154859545"},
+    {"title":"Peter","startDate":"2026-05-14","endDate":"2026-05-15","note":"","color":"#6d4c41","author":"Spätschicht German","id":"1778154891939"},
+    {"title":"Tim geht um 12 Uhr","startDate":"2026-05-22","endDate":"2026-05-22","note":"","color":"#fdd835","author":"Tim","id":"1778156842604"},
+    {"title":"Tim Urlaub","startDate":"2026-05-28","endDate":"2026-05-29","note":"","color":"#fdd835","author":"Tim","id":"1778156856687"},
+    {"title":"Tim Urlaub","startDate":"2026-08-10","endDate":"2026-08-14","note":"","color":"#fdd835","author":"Tim","id":"1778156925051"},
+    {"title":"Tim Urlaub","startDate":"2026-12-15","endDate":"2027-01-11","note":"","color":"#fdd835","author":"Tim","id":"1778156982903"},
+    {"title":"Samu arbeitet","startDate":"2026-05-11","endDate":"2026-05-11","note":"","color":"#00897b","author":"Schröggy","id":"1778263061798"},
+    {"title":"SocGenSchiff","startDate":"2026-05-28","endDate":"2026-05-28","note":"","color":"#fb8c00","author":"Events","id":"1778571668682"},
+    {"title":"Urlaub Micha","startDate":"2026-06-05","endDate":"2026-06-05","note":"","color":"#212121","author":"Micha","id":"1778571808425"},
+    {"title":"Micha Urlaub","startDate":"2026-06-23","endDate":"2026-06-23","note":"","color":"#212121","author":"Micha","id":"1778571888098"},
+    {"title":"Dorant Urlaub","startDate":"2026-05-20","endDate":"2026-05-27","note":"","color":"#e53935","author":"Dorant","id":"1778572460611"},
+    {"title":"Niklas Urlaub","startDate":"2026-05-15","endDate":"2026-05-15","note":"","color":"#69f0ae","author":"Niklas","id":"1778572506423"},
+    {"title":"Niklas Xetra Prüfung","startDate":"2026-05-13","endDate":"2026-05-13","note":"","color":"#69f0ae","author":"Niklas","id":"1778572522191"},
+    {"title":"Niklas Urlaub","startDate":"2026-10-26","endDate":"2026-10-30","note":"","color":"#69f0ae","author":"Niklas","id":"1778572560169"},
+    {"title":"Niklas Urlaub (noch nicht genehmigt)","startDate":"2026-08-17","endDate":"2026-09-08","note":"","color":"#69f0ae","author":"Niklas","id":"1778572639214"},
+    {"title":"Thorsten Urlaub","startDate":"2026-05-14","endDate":"2026-05-14","note":"","color":"#f4511e","author":"Thorsten","id":"1778572852334"},
+    {"title":"Marco","startDate":"2026-06-01","endDate":"2026-06-05","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573059202"},
+    {"title":"Mick","startDate":"2026-06-08","endDate":"2026-06-10","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573123395"},
+    {"title":"Ishak","startDate":"2026-06-11","endDate":"2026-06-12","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573132926"},
+    {"title":"Julian","startDate":"2026-06-15","endDate":"2026-06-19","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573155228"},
+    {"title":"Thomas","startDate":"2026-06-22","endDate":"2026-06-26","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573178391"},
+    {"title":"Alex","startDate":"2026-06-29","endDate":"2026-07-03","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573211639"},
+    {"title":"Joe","startDate":"2026-07-06","endDate":"2026-07-10","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573367076"},
+    {"title":"Marco","startDate":"2026-07-13","endDate":"2026-07-17","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573378620"},
+    {"title":"Ishak","startDate":"2026-07-20","endDate":"2026-07-24","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573392845"},
+    {"title":"Ricardo+Sören","startDate":"2026-07-27","endDate":"2026-07-31","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1778573408334"},
+    {"title":"Urlaub Micha","startDate":"2026-08-31","endDate":"2026-09-20","note":"","color":"#212121","author":"Micha","id":"1778573547440"},
+    {"title":"TIM GE","startDate":"2026-06-01","endDate":"2026-06-03","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778594439893"},
+    {"title":"Dorant","startDate":"2026-06-04","endDate":"2026-06-05","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778594486117"},
+    {"title":"Tim","startDate":"2026-05-11","endDate":"2026-05-13","note":"","color":"#fdd835","author":"Tim","id":"1778821683592"},
+    {"title":"Tim","startDate":"2026-05-11","endDate":"2026-05-13","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778821683593"},
+    {"title":"Manu","startDate":"2026-05-18","endDate":"2026-05-22","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778821785667"},
+    {"title":"Bernd","startDate":"2026-05-25","endDate":"2026-05-29","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778821812220"},
+    {"title":"Peter","startDate":"2026-06-08","endDate":"2026-06-10","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822268548"},
+    {"title":"Dorant","startDate":"2026-06-11","endDate":"2026-06-12","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822290125"},
+    {"title":"Thorsten","startDate":"2026-06-15","endDate":"2026-06-19","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822309349"},
+    {"title":"Bernd","startDate":"2026-06-22","endDate":"2026-06-26","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822347975"},
+    {"title":"Manu","startDate":"2026-06-29","endDate":"2026-07-03","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822376048"},
+    {"title":"Peter","startDate":"2026-07-06","endDate":"2026-07-10","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822405529"},
+    {"title":"Tim","startDate":"2026-07-13","endDate":"2026-07-17","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822425393"},
+    {"title":"Dorant","startDate":"2026-07-20","endDate":"2026-07-24","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822447082"},
+    {"title":"Thorsten","startDate":"2026-07-27","endDate":"2026-07-31","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822471331"},
+    {"title":"Bernd","startDate":"2026-08-03","endDate":"2026-08-07","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822500459"},
+    {"title":"Dorant","startDate":"2026-08-10","endDate":"2026-08-11","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822525557"},
+    {"title":"Peter","startDate":"2026-08-12","endDate":"2026-08-14","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822538644"},
+    {"title":"Manu","startDate":"2026-08-17","endDate":"2026-08-21","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822562822"},
+    {"title":"Tim","startDate":"2026-08-24","endDate":"2026-08-28","note":"","color":"#6d4c41","author":"Spätschicht german","id":"1778822595056"},
+    {"title":"Dorant Urlaub","startDate":"2026-07-02","endDate":"2026-07-03","note":"","color":"#e53935","author":"Dorant","id":"1779089749705"},
+    {"title":"Thomas Urlaub","startDate":"2026-06-15","endDate":"2026-06-19","note":"","color":"#00e5ff","author":"Thomas","id":"1779094109311"},
+    {"title":"Thomas Urlaub","startDate":"2026-07-20","endDate":"2026-07-24","note":"","color":"#00e5ff","author":"Thomas","id":"1779094145248"},
+    {"title":"Marco Urlaub","startDate":"2026-06-22","endDate":"2026-06-26","note":"","color":"#1565c0","author":"Marco","id":"1779098274638"},
+    {"title":"Thomas Urlaub","startDate":"2026-05-22","endDate":"2026-05-22","note":"","color":"#00e5ff","author":"Thomas","id":"1779107397512"},
+    {"title":"Joe","startDate":"2026-05-29","endDate":"2026-05-29","note":"","color":"#8e24aa","author":"Spätschicht international","id":"1779107811010"},
+    {"title":"Samu arbeitet","startDate":"2026-05-19","endDate":"2026-05-19","note":"","color":"#00897b","author":"Schröggy","id":"1779113715908"},
+    {"title":"Samu arbeitet","startDate":"2026-05-18","endDate":"2026-05-18","note":"","color":"#00897b","author":"Schröggy","id":"1779113750222"},
+    {"title":"Urlaub Ishak","startDate":"2026-06-01","endDate":"2026-06-05","note":"","color":"#00c853","author":"Ishak","id":"1779427614807"},
+    {"title":"Peter Urlaub","startDate":"2026-05-29","endDate":"2026-05-29","note":"","color":"#a1887f","author":"Peter","id":"1779439400562"},
+    {"title":"Peter Urlaub","startDate":"2026-06-26","endDate":"2026-06-29","note":"","color":"#a1887f","author":"Peter","id":"1779439561196"},
+    {"title":"Peter Urlaub","startDate":"2026-08-03","endDate":"2026-08-10","note":"","color":"#a1887f","author":"Peter","id":"1779439652100"},
+    {"title":"Peter Urlaub","startDate":"2026-09-14","endDate":"2026-09-25","note":"","color":"#a1887f","author":"Peter","id":"1779439695462"},
+    {"title":"Peter Urlaub","startDate":"2026-12-28","endDate":"2026-12-30","note":"","color":"#a1887f","author":"Peter","id":"1779439753280"},
+    {"title":"Micha Urlaub","startDate":"2026-06-15","endDate":"2026-06-19","note":"","color":"#212121","author":"Micha","id":"1779691075308"},
+    {"title":"Micha Urlaub","startDate":"2026-06-29","endDate":"2026-07-03","note":"","color":"#212121","author":"Micha","id":"1779691109889"}
   ],
   "userDirectory": {
-    "spÃÂÃÂ¤tschicht international": "#8e24aa",
-    "sÃÂÃÂ¶ren": "#b0bec5",
+    "spätschicht international": "#8e24aa",
+    "sören": "#b0bec5",
     "alex": "#546e7a",
     "thomas": "#00e5ff",
     "j fritz": "#42a5f5",
-    "spÃÂÃÂ¤tschicht german": "#6d4c41",
+    "spätschicht german": "#6d4c41",
     "tim": "#fdd835",
     "bernd": "#f06292",
     "manu": "#f9a825",
     "dorant": "#e53935",
     "peter": "#a1887f",
     "ishak": "#00c853",
-    "schrÃÂÃÂ¶ggy": "#00897b",
+    "schröggy": "#00897b",
     "events": "#fb8c00",
     "micha": "#212121",
     "ricardo": "#43a047",
@@ -671,27 +96,7 @@
     "marco": "#1565c0"
   },
   "groupConfig": {
-    "German Equities": [
-      "bernd",
-      "dorant",
-      "manu",
-      "peter",
-      "tim",
-      "spÃÂÃÂ¤tschicht german",
-      "events",
-      "niklas",
-      "thorsten"
-    ],
-    "International Equities": [
-      "alex",
-      "j fritz",
-      "schrÃÂÃÂ¶ggy",
-      "sÃÂÃÂ¶ren",
-      "spÃÂÃÂ¤tschicht international",
-      "ishak",
-      "thomas",
-      "events",
-      "micha"
-    ]
+    "German Equities": ["bernd","dorant","manu","peter","tim","spätschicht german","events","niklas","thorsten"],
+    "International Equities": ["alex","j fritz","schröggy","sören","spätschicht international","ishak","thomas","events","micha"]
   }
 }
