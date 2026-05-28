@@ -203,6 +203,146 @@ const THEMES = {
 };
 
 // ─── Component ───────────────────────────────────────────────────────────────
+
+function MonthGrid({ cells, firstDay, year, month, selectedDay, getEntriesForDay, openDay, isToday, T, theme, entries, hiddenUsers, getVisibleUsers, toDateStr }) {
+  // Build weeks array
+  const weeks = [];
+  for (let i = 0; i < cells.length; i += 7) {
+    weeks.push(cells.slice(i, i + 7));
+  }
+
+  // For each week, compute event layout (which row each event gets)
+  function getWeekEvents(week) {
+    const weekDays = week.map((d, i) => {
+      if (!d) return null;
+      return toDateStr(year, month, d);
+    });
+
+    // Collect all entries that appear in this week
+    const visibleUsers = getVisibleUsers();
+    const weekEntries = [];
+    entries.forEach(e => {
+      if (!e?.startDate || !e?.endDate) return;
+      if (hiddenUsers.has(e.author?.toLowerCase())) return;
+      if (visibleUsers !== null && !visibleUsers.includes(e.author?.toLowerCase())) return;
+      
+      // Find which days of this week this entry spans
+      const startCol = weekDays.findIndex(d => d && e.startDate <= d && e.endDate >= d);
+      if (startCol === -1) return;
+      
+      let endCol = startCol;
+      for (let c = startCol + 1; c < 7; c++) {
+        if (weekDays[c] && e.endDate >= weekDays[c]) endCol = c;
+        else break;
+      }
+      
+      weekEntries.push({ ...e, startCol, endCol });
+    });
+
+    // Sort by duration descending, then by startDate
+    weekEntries.sort((a, b) => (b.endCol - b.startCol) - (a.endCol - a.startCol) || a.startDate.localeCompare(b.startDate));
+
+    // Assign rows - greedy algorithm
+    const rows = [];
+    weekEntries.forEach(entry => {
+      let row = 0;
+      while (true) {
+        if (!rows[row]) { rows[row] = []; }
+        const conflict = rows[row].some(r => !(r.endCol < entry.startCol || r.startCol > entry.endCol));
+        if (!conflict) {
+          rows[row].push(entry);
+          entry.row = row;
+          break;
+        }
+        row++;
+      }
+    });
+
+    return weekEntries;
+  }
+
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:4 }}>
+      {weeks.map((week, wi) => {
+        const weekEvents = getWeekEvents(week);
+        const maxRows = weekEvents.length > 0 ? Math.max(...weekEvents.map(e => e.row)) + 1 : 0;
+        const cellHeight = Math.max(60, 28 + maxRows * 22);
+
+        return (
+          <div key={wi} style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4 }}>
+            {/* KW */}
+            {(() => {
+              const firstReal = week.find(d => d !== null);
+              const showKW = week[0] !== null || week.filter(d=>d!==null).length >= 4;
+              const kw = firstReal ? (() => {
+                const d = new Date(Date.UTC(year, month, firstReal));
+                const dayNum = d.getUTCDay() || 7;
+                d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+                const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+              })() : "";
+              return (
+                <div className="kw-cell" style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, height:cellHeight }}>
+                  {showKW ? kw : ""}
+                </div>
+              );
+            })()}
+
+            {/* Day cells */}
+            {week.map((d, di) => {
+              if (!d) return <div key={di} style={{ height:cellHeight, background:T.cellBg, border:`1px solid ${T.cellBorder}`, borderRadius:8 }}/>;
+              const isSel = selectedDay === d;
+              const isTod = isToday(d);
+              const isWe = di === 5 || di === 6;
+              const dayEvents = weekEvents.filter(e => e.startCol <= di && e.endCol >= di);
+
+              return (
+                <div key={di} className={`day-cell${isSel?" sel":""}`} onClick={() => openDay(d)}
+                  style={{ background:T.cellBg, border:`1px solid ${isSel ? T.cellSelectedOutline : T.cellBorder}`, borderRadius:8, height:cellHeight, position:"relative", overflow:"hidden", outline: isSel ? `2px solid ${T.cellSelectedOutline}` : "none" }}>
+                  {/* Day number */}
+                  <div style={{ display:"flex", justifyContent:"center", paddingTop:4 }}>
+                    <div style={{
+                      width:24, height:24, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center",
+                      background: isTod ? T.dayNumTodayBg : "transparent",
+                      fontWeight: isTod ? 700 : 400, fontSize:12,
+                      color: isTod ? T.dayNumTodayColor : isWe ? T.dayNumWeekend : T.dayNumColor,
+                      boxShadow: isTod && theme==="gold" ? `0 0 10px ${T.accent}66` : "none",
+                    }}>{d}</div>
+                  </div>
+
+                  {/* Event bars positioned by row */}
+                  {dayEvents.map((e, ei) => {
+                    const isStart = e.startCol === di;
+                    const isEnd = e.endCol === di;
+                    return (
+                      <div key={e.id + ei} style={{
+                        position:"absolute",
+                        top: 28 + e.row * 22,
+                        left: isStart ? 2 : 0,
+                        right: isEnd ? 2 : 0,
+                        height:18,
+                        background: e.color,
+                        borderRadius: isStart && isEnd ? 4 : isStart ? "4px 0 0 4px" : isEnd ? "0 4px 4px 0" : 0,
+                        display:"flex", alignItems:"center",
+                        paddingLeft: isStart ? 6 : 2,
+                        overflow:"hidden",
+                        zIndex: 1,
+                        boxShadow: theme==="gold" ? `0 1px 4px ${e.color}66` : "none",
+                      }}>
+                        {isStart && <span style={{ fontSize:10, color:"#fff", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{e.title}</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function YearView({ year, entries, getEntriesForDay, T, theme, MONTHS, DAYS, onDayClick, todayStr }) {
   function getDaysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
   function getFirstDay(y, m) { const d = new Date(y, m, 1).getDay(); return d === 0 ? 6 : d - 1; }
@@ -685,58 +825,25 @@ export default function Kalender() {
             ))}
           </div>
 
-          {/* Grid */}
-          <div className="cal-grid" style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4 }}>
-            {cells.map((d,i)=>{
-              // Insert KW label at start of each week row
-              const weekIndex = Math.floor(i / 7);
-              const dayInWeek = i % 7;
-              const kwEl = dayInWeek === 0 ? (() => {
-                const weekCells = cells.slice(i, i+7);
-                const realDays = weekCells.filter(x => x !== null);
-                // Only show KW if Monday of this week is a real day (not a leading empty week)
-                const mondayIsReal = weekCells[0] !== null;
-                const hasAnyReal = realDays.length > 0;
-                // Show KW only if Monday is real, OR if this week has more real days than empty days (majority)
-                const showKW = mondayIsReal || realDays.length >= 4;
-                const firstRealDay = realDays[0];
-                const kw = firstRealDay ? getKW(year, month, firstRealDay) : "";
-                return (
-                  <div key={`kw-${weekIndex}`} className="kw-cell" style={{ display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:8, fontSize:11, fontWeight:700, color:T.textSecondary, minHeight:100 }}>
-                    {showKW ? kw : ""}
-                  </div>
-                );
-              })() : null;
-              if(!d) return <React.Fragment key={`empty-${i}`}>{kwEl}<div style={{ minHeight:100 }}/></React.Fragment>;
-              const dayStr  = toDateStr(year,month,d);
-              const dayEnts = getEntriesForDay(dayStr);
-              const isSel   = selectedDay===d;
-              const isTod   = isToday(d);
-              const dow     = (firstDay+d-1)%7;
-              const isWe    = dow===5||dow===6;
-              return (
-                <React.Fragment key={i}>
-                  {kwEl}
-                  <div className={`day-cell${isSel?" sel":""}`} onClick={()=>openDay(d)}
-                  style={{ background:T.cellBg, border:`1px solid ${T.cellBorder}`, minHeight:100, padding:"6px 4px 4px", display:"flex", flexDirection:"column", gap:2, transition:"background .12s" }}>
-                  <div style={{ display:"flex", justifyContent:"center", marginBottom:2 }}>
-                    <div style={{ width:28, height:28, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center",
-                      background:isTod?T.dayNumTodayBg:"transparent",
-                      fontWeight:isTod?700:400, fontSize:13,
-                      color:isTod?T.dayNumTodayColor:isWe?T.dayNumWeekend:T.dayNumColor,
-                      boxShadow:isTod&&theme==="gold"?`0 0 12px ${T.accent}66`:"none",
-                    }}>{d}</div>
-                  </div>
-                  {dayEnts.map((e,ei)=>(
-                    <div key={ei} className="entry-bar" style={{ background:e.color, borderRadius:4, padding:"2px 6px", fontSize:11, color:"#fff", overflow:"hidden", whiteSpace:"nowrap", textOverflow:"ellipsis", fontWeight:500, boxShadow:theme==="gold"?`0 1px 4px ${e.color}66`:"none" }}>{e.title}</div>
-                  ))}
-                </div>
-                </React.Fragment>
-              );
-            })}
-          </div>
+          {/* Grid - Event layout with spanning rows */}
+          <MonthGrid
+            cells={cells}
+            firstDay={firstDay}
+            year={year}
+            month={month}
+            selectedDay={selectedDay}
+            getEntriesForDay={getEntriesForDay}
+            openDay={openDay}
+            isToday={(d) => toDateStr(year, month, d) === toDateStr(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
+            T={T}
+            theme={theme}
+            entries={entries}
+            hiddenUsers={hiddenUsers}
+            getVisibleUsers={getVisibleUsers}
+            toDateStr={toDateStr}
+          />
 
-          {/* Day detail */}
+                    {/* Day detail */}
           {selectedDay && (
             <div className="detail-panel" style={{ marginTop:20, background:T.detailBg, borderRadius:12, border:`1px solid ${T.detailBorder}`, padding:20, boxShadow:T.detailShadow }}>
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
