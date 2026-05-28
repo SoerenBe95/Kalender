@@ -798,7 +798,6 @@ export default function Kalender() {
               )}
             </div>
           </div>
-          </> }
         </div>
 
         {/* ── Main Calendar ── */}
@@ -816,7 +815,8 @@ export default function Kalender() {
               todayStr={toDateStr(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
             />
           )}
-          {calendarView === "monat" && <>
+          {calendarView === "monat" && (
+          <React.Fragment>
           {/* Day headers */}
           <div className="cal-headers" style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4, marginBottom:4 }}>
             <div style={{ textAlign:"center", fontSize:11, fontWeight:700, color:T.textSecondary, padding:"6px 0" }}>KW</div>
@@ -877,6 +877,8 @@ export default function Kalender() {
                   </div>
               }
             </div>
+          )}
+          </React.Fragment>
           )}
         </div>
       </div>
