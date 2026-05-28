@@ -203,6 +203,71 @@ const THEMES = {
 };
 
 // ─── Component ───────────────────────────────────────────────────────────────
+function YearView({ year, entries, getEntriesForDay, T, theme, MONTHS, DAYS, onDayClick, todayStr }) {
+  function getDaysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
+  function getFirstDay(y, m) { const d = new Date(y, m, 1).getDay(); return d === 0 ? 6 : d - 1; }
+
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+      {MONTHS.map((monthName, mi) => {
+        const daysInMonth = getDaysInMonth(year, mi);
+        const firstDay = getFirstDay(year, mi);
+        const cells = [];
+        for (let i=0; i<firstDay; i++) cells.push(null);
+        for (let d=1; d<=daysInMonth; d++) cells.push(d);
+        while (cells.length % 7 !== 0) cells.push(null);
+
+        return (
+          <div key={mi} style={{ display:"flex", borderBottom:`1px solid ${T.cellBorder}`, minHeight:80 }}>
+            {/* Month label */}
+            <div style={{ width:80, flexShrink:0, display:"flex", alignItems:"flex-start", justifyContent:"flex-end", paddingRight:12, paddingTop:6 }}>
+              <span style={{ fontSize:12, fontWeight:700, color:T.textSecondary }}>{monthName}</span>
+            </div>
+            {/* Days grid */}
+            <div style={{ flex:1, display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:1 }}>
+              {/* Day headers only for January */}
+              {mi === 0 && DAYS.map((d,i) => (
+                <div key={d} style={{ textAlign:"center", fontSize:9, fontWeight:600, color:i>=5?T.dayNumWeekend:T.textSecondary, padding:"2px 0" }}>{d}</div>
+              ))}
+              {cells.map((d, ci) => {
+                if (!d) return <div key={ci}/>;
+                const dayStr = `${year}-${String(mi+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const dayEnts = getEntriesForDay(dayStr);
+                const isToday = dayStr === todayStr;
+                const dow = (firstDay + d - 1) % 7;
+                const isWe = dow === 5 || dow === 6;
+                return (
+                  <div key={ci} onClick={() => onDayClick(mi, d)} style={{
+                    padding:"2px 2px", cursor:"pointer", borderRadius:4, minHeight:40,
+                    background: isToday ? (theme==="gold"?"#1a1500":"#e8f0fe") : "transparent",
+                    transition:"background .1s",
+                  }}
+                  onMouseEnter={e=>e.currentTarget.style.background=theme==="gold"?"#1a1a0a":"#f0f4ff"}
+                  onMouseLeave={e=>e.currentTarget.style.background=isToday?(theme==="gold"?"#1a1500":"#e8f0fe"):"transparent"}>
+                    <div style={{
+                      textAlign:"center", fontSize:11, fontWeight:isToday?700:400,
+                      color: isToday ? T.accent : isWe ? T.dayNumWeekend : T.textSecondary,
+                      marginBottom:2
+                    }}>{d}</div>
+                    {dayEnts.slice(0,3).map((e,ei) => (
+                      <div key={ei} style={{
+                        background:e.color, borderRadius:2, padding:"1px 3px",
+                        fontSize:8, color:"#fff", overflow:"hidden", whiteSpace:"nowrap",
+                        textOverflow:"ellipsis", marginBottom:1, fontWeight:500
+                      }}>{e.title}</div>
+                    ))}
+                    {dayEnts.length > 3 && <div style={{fontSize:7,color:T.textSecondary}}>+{dayEnts.length-3}</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Kalender() {
   const today    = new Date();
   const todayStr = toDateStr(today.getFullYear(), today.getMonth(), today.getDate());
@@ -234,6 +299,7 @@ export default function Kalender() {
   const [resetConfirm, setResetConfirm] = useState(null); // 'entries' | 'users' | null
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [activeView, setActiveView] = useState("Gesamt Equities");
+  const [calendarView, setCalendarView] = useState("monat"); // "monat" | "jahr"
   const [groupEditor, setGroupEditor] = useState(false);
   const [groupConfig, setGroupConfig] = useState({}); // { "German Equities": ["anna","max"], ... }
 
@@ -517,6 +583,16 @@ export default function Kalender() {
               }}>{g}</button>
             ))}
           </div>
+          {/* Monat/Jahr toggle */}
+          <div style={{ display:"flex", gap:4, marginLeft:8, background:theme==="gold"?"#1a1a0a":"#f0f4ff", borderRadius:20, padding:3 }}>
+            {["monat","jahr"].map(v => (
+              <button key={v} className="btn" onClick={()=>setCalendarView(v)} style={{
+                background: calendarView===v ? (theme==="gold"?"#c9a84c":"#1a73e8") : "transparent",
+                color: calendarView===v ? (theme==="gold"?"#0d0d0d":"#fff") : T.textSecondary,
+                borderRadius:16, padding:"5px 12px", fontSize:12, fontWeight:600, fontFamily:"inherit",
+              }}>{v === "monat" ? "Monat" : "Jahr"}</button>
+            ))}
+          </div>
           <div style={{ display:"flex", alignItems:"center", gap:4, marginLeft:12 }}>
             <button className="btn" onClick={prevMonth} style={{ padding:"6px 10px", borderRadius:8, color:T.textSecondary, fontSize:18 }}>‹</button>
             <span style={{ fontWeight:600, fontSize:17, color:T.textPrimary, minWidth:160, textAlign:"center" }}>{MONTHS[month]} {year}</span>
@@ -582,10 +658,25 @@ export default function Kalender() {
               )}
             </div>
           </div>
+          </> }
         </div>
 
         {/* ── Main Calendar ── */}
         <div className="main-padding" style={{ flex:1, padding:"16px 20px", overflow:"auto" }}>
+          {calendarView === "jahr" && (
+            <YearView
+              year={year}
+              entries={entries}
+              getEntriesForDay={getEntriesForDay}
+              T={T}
+              theme={theme}
+              MONTHS={MONTHS}
+              DAYS={DAYS}
+              onDayClick={(m, d) => { setMonth(m); setSelectedDay(d); setCalendarView("monat"); }}
+              todayStr={toDateStr(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
+            />
+          )}
+          {calendarView === "monat" && <>
           {/* Day headers */}
           <div className="cal-headers" style={{ display:"grid", gridTemplateColumns:"48px repeat(7,1fr)", gap:4, marginBottom:4 }}>
             <div style={{ textAlign:"center", fontSize:11, fontWeight:700, color:T.textSecondary, padding:"6px 0" }}>KW</div>
