@@ -710,6 +710,15 @@
       "color": "#546e7a",
       "author": "Alex",
       "id": "1780895465711"
+    },
+    {
+      "title": "Urlaub Thomas",
+      "startDate": "2026-07-03",
+      "endDate": "2026-07-03",
+      "note": "",
+      "color": "#00e5ff",
+      "author": "Thomas",
+      "id": "1780895742005"
     }
   ],
   "userDirectory": {
