@@ -872,6 +872,15 @@
       "color": "#69f0ae",
       "author": "Niklas",
       "id": "1782726004122"
+    },
+    {
+      "title": "Urlaub Louis",
+      "startDate": "2026-08-03",
+      "endDate": "2026-08-07",
+      "note": "",
+      "color": "#1e88e5",
+      "author": "Louis",
+      "id": "1782884998201"
     }
   ],
   "userDirectory": {
