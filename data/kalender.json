@@ -1259,6 +1259,15 @@
       "color": "#a1887f",
       "author": "Peter",
       "id": "1784788845589"
+    },
+    {
+      "title": "Urlaub",
+      "startDate": "2026-07-31",
+      "endDate": "2026-07-31",
+      "note": "",
+      "color": "#f06292",
+      "author": "Bernd",
+      "id": "1784821171707"
     }
   ],
   "userDirectory": {
