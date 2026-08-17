@@ -1484,6 +1484,15 @@
       "color": "#90a4ae",
       "author": "Joe",
       "id": "1786946516474"
+    },
+    {
+      "title": "Tim Urlaub",
+      "startDate": "2026-09-09",
+      "endDate": "2026-09-11",
+      "note": "",
+      "color": "#fdd835",
+      "author": "Tim",
+      "id": "1786948650997"
     }
   ],
   "userDirectory": {
