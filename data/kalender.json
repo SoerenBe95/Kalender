@@ -1916,6 +1916,15 @@
       "color": "#fb8c00",
       "author": "Events",
       "id": "1790147424597"
+    },
+    {
+      "title": "Sven Urlaub (nicht genehmigt)",
+      "startDate": "2026-10-22",
+      "endDate": "2026-10-22",
+      "note": "",
+      "color": "#00897b",
+      "author": "Sven",
+      "id": "1790150531967"
     }
   ],
   "userDirectory": {
