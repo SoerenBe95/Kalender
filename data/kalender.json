@@ -1988,6 +1988,15 @@
       "color": "#fdd835",
       "author": "Tim",
       "id": "1790932332050"
+    },
+    {
+      "title": "Urlaub Sven (nicht genehmigt)",
+      "startDate": "2026-11-06",
+      "endDate": "2026-11-06",
+      "note": "",
+      "color": "#00897b",
+      "author": "Sven",
+      "id": "1791460661330"
     }
   ],
   "userDirectory": {
