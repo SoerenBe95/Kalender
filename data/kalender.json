@@ -2249,6 +2249,24 @@
       "color": "#fdd835",
       "author": "Tim",
       "id": "1792502155553"
+    },
+    {
+      "title": "Joe",
+      "startDate": "2026-11-02",
+      "endDate": "2026-11-03",
+      "note": "",
+      "color": "#90a4ae",
+      "author": "Joe",
+      "id": "1792999006320"
+    },
+    {
+      "title": "Joe",
+      "startDate": "2026-11-02",
+      "endDate": "2026-11-03",
+      "note": "",
+      "color": "#8e24aa",
+      "author": "Spätschicht international",
+      "id": "1792999006321"
     }
   ],
   "userDirectory": {
