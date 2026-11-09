@@ -2321,6 +2321,15 @@
       "color": "#f9a825",
       "author": "Manu",
       "id": "1793989376631"
+    },
+    {
+      "title": "Urlaub",
+      "startDate": "2027-02-02",
+      "endDate": "2027-02-03",
+      "note": "",
+      "color": "#00e5ff",
+      "author": "Thomas",
+      "id": "1794223545268"
     }
   ],
   "userDirectory": {
