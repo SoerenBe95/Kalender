@@ -2429,6 +2429,15 @@
       "color": "#a1887f",
       "author": "Peter",
       "id": "1794815697172"
+    },
+    {
+      "title": "Tim Urlaub",
+      "startDate": "2026-11-20",
+      "endDate": "2026-11-27",
+      "note": "",
+      "color": "#fdd835",
+      "author": "Tim",
+      "id": "1794901963283"
     }
   ],
   "userDirectory": {
