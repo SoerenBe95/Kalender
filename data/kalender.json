@@ -2438,6 +2438,15 @@
       "color": "#fdd835",
       "author": "Tim",
       "id": "1794901963283"
+    },
+    {
+      "title": "Urlaub (noch nicht genehmigt)",
+      "startDate": "2027-01-18",
+      "endDate": "2027-01-18",
+      "note": "",
+      "color": "#69f0ae",
+      "author": "Niklas",
+      "id": "1795100724606"
     }
   ],
   "userDirectory": {
